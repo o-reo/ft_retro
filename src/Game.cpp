@@ -4,6 +4,9 @@ Game::Game() : entities(nullptr) {
   initscr();
   noecho();
   cbreak();
+  clear();
+  timeout(-1);
+  curs_set(0);
   Logger *log = Logger::get();
   log->out() << "Initializing window" << std::endl;
 }
@@ -80,6 +83,7 @@ Entity *Game::buildEntity(const std::string &type) {
 
 void Game::loop() {
   // Logger *log = Logger::get();
+  this->buildEntity("Enemy");
   while (true) {
     this->purgeEntities();
     Game::EntityNode *node = this->entities;
@@ -92,7 +96,7 @@ void Game::loop() {
     }
     while (node) {
       // Move cursor and print the asset
-      // printw()
+      mvaddch(node->entity->getY(), node->entity->getX(), node->entity->getC()[0]);
       node = node->next;
     }
     this->checkCollisions();
