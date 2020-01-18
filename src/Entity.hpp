@@ -6,7 +6,7 @@
 /*   By: bpajot <bpajot@student.le-101.fr>          +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/18 11:12:54 by bpajot       #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/18 17:11:00 by bpajot      ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/01/18 18:59:02 by bpajot      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -32,18 +32,18 @@ protected:
 
 public:
   virtual ~Entity(void);
-
-  std::string getType(void) const;
-  std::string getC(void) const;
-  unsigned int getNbLive(void) const;
-  unsigned int getX(void) const;
-  unsigned int getY(void) const;
-  void setNbLive(unsigned int nbLive);
-  void setX(unsigned int x);
-  void setY(unsigned int y);
-  virtual void updatePos(void) = 0;
-  void setColor(unsigned int x);
-  unsigned int getColor() const;
+  
+  std::string		getType(void) const;
+  std::string		getC(void) const;
+  unsigned int	getNbLive(void) const;
+  int				getX(void) const;
+  int				getY(void) const;
+  unsigned int 	getColor(void) const;
+  void			setNbLive(unsigned int nbLive);
+  void			setX(int x);
+  void			setY(int y);
+  void 			setColor(unsigned int color);
+  virtual void	updatePos(void) = 0;
 };
 
 #endif

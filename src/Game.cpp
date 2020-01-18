@@ -13,6 +13,9 @@ Game::Game() : entities(nullptr), end(false) {
   init_pair(Game::COLOR_CALM, COLOR_GREEN, COLOR_BLACK);
 
   this->player = (Player *)this->buildEntity("Player");
+  int i = -1;
+  while (++i < 100)
+    this->buildEntity("Enemy");
   Logger *log = Logger::get();
   log->out() << "Initializing window" << std::endl;
 }
@@ -26,13 +29,16 @@ Game::~Game() {
   }
   endwin();
   log->out() << "Closing window" << std::endl;
+  delete log;
+  this->end = true;
 }
 
 void Game::checkCollisions() {
   Game::EntityNode *node = this->entities;
   while (node) {
     Game::EntityNode *check_node = this->entities;
-    if (node->entity->getX() > (unsigned int)COLS || node->entity->getY() > (unsigned int)LINES) {
+    if (node->entity->getX() >= COLS || node->entity->getY() >= LINES
+      || node->entity->getX() < 0 || node->entity->getY() < 0) {
       node->entity->setNbLive(0);
       node = node->next;
       continue;
@@ -41,6 +47,8 @@ void Game::checkCollisions() {
       if (check_node != node && check_node->entity->getX() == node->entity->getX() &&
           check_node->entity->getY() == node->entity->getY()) {
         node->entity->setNbLive(node->entity->getNbLive() - 1);
+        if (node->entity->getType() == "Player" && node->entity->getNbLive() == 0)
+          this->end = true;
         break;
       }
       check_node = check_node->next;
@@ -80,12 +88,12 @@ Entity *Game::buildEntity(const std::string &type) {
   Game::EntityNode *newNode = new Game::EntityNode;
   newNode->next = nullptr;
   if (type == "Missile") {
-    newNode->entity = new Missile(COLS / 3, LINES / 2, "Player");
+    newNode->entity = new Missile(COLS / 5, LINES / 2, "Player");
     newNode->entity->setColor(COLOR_ANGRY);
   } else if (type == "Enemy") {
-    newNode->entity = new Enemy(3 * COLS / 4, rand() % LINES);
+    newNode->entity = new Enemy(3 * COLS / 4 + rand() % (COLS / 4), rand() % LINES);
   } else if (type == "Player") {
-    newNode->entity = new Player(COLS / 3, LINES / 2);
+    newNode->entity = new Player(COLS / 5, LINES / 2);
     newNode->entity->setColor(COLOR_CONSTIPATED);
   }
   if (!node) {
@@ -121,7 +129,7 @@ void Game::catchEvents() {
       this->player->setControl(Player::CONTROL_LEFT);
     break;
   case 67:
-    if (this->player->getX() + 1 < (unsigned int)COLS)
+    if (this->player->getX() < COLS - 1)
       this->player->setControl(Player::CONTROL_RIGHT);
     break;
   case 65:
@@ -129,7 +137,7 @@ void Game::catchEvents() {
       this->player->setControl(Player::CONTROL_UP);
     break;
   case 66:
-    if (this->player->getY() + 1 < (unsigned int)LINES)
+    if (this->player->getY() < LINES - 1)
       this->player->setControl(Player::CONTROL_DOWN);
     break;
   case 32:
@@ -152,6 +160,9 @@ void Game::loop() {
     this->update();
     this->checkCollisions();
     refresh();
-    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    clock_t   tac,tic; 
+    tic = tac = clock();
+    while (tac - tic < CLOCKS_PER_SEC / 100)
+      tac = clock();
   }
 }
