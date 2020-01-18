@@ -50,8 +50,6 @@ bool			Entity::getAlive(void) const
 	return this->_isAlive;
 }
 
-bool Entity::getAlive(void) const { return this->_isAlive; }
-
 unsigned int Entity::getX(void) const { return this->_x; }
 
 unsigned int Entity::getY(void) const { return this->_y; }
