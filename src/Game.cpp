@@ -27,8 +27,8 @@ void Game::checkCollisions() {
   while (node) {
     Game::EntityNode *check_node = this->entities;
     while (check_node) {
-      if (check_node->entity->getX() == node->entity->getX()
-        && check_node->entity->getY() == node->entity->getY()) {
+      if (check_node != node && check_node->entity->getX() == node->entity->getX() &&
+          check_node->entity->getY() == node->entity->getY()) {
         node->entity->setDead();
         break;
       }
@@ -69,11 +69,11 @@ Entity *Game::buildEntity(const std::string &type) {
   Game::EntityNode *newNode = new Game::EntityNode;
   newNode->next = nullptr;
   if (type == "Missile") {
-    newNode->entity = new Missile(LINES / 2, COLS / 3, "Player");
+    newNode->entity = new Missile(COLS / 3, LINES / 2, "Player");
   } else if (type == "Enemy") {
-    newNode->entity = new Enemy(rand() % LINES, 3 * COLS / 4);
+    newNode->entity = new Enemy(3 * COLS / 4, rand() % LINES);
   } else if (type == "Player") {
-    newNode->entity = new Player(LINES / 2, COLS / 3);
+    newNode->entity = new Player(COLS / 3, LINES / 2);
   }
   if (!node) {
     this->entities = newNode;
