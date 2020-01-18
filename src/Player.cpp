@@ -13,20 +13,34 @@
 
 #include "Player.hpp"
 
-Player::Player(unsigned int x, unsigned int y) :	Entity()
-{
-	this->_type = "Player";
-	this->_c = "o";
-	this->_isAlive = true;
-	this->_x = x;
-	this->_y= y;
+Player::Player(unsigned int x, unsigned int y) : Entity(), control(CONTROL_NONE) {
+  this->_type = "Player";
+  this->_c = "o";
+  this->_isAlive = true;
+  this->_x = x;
+  this->_y = y;
 }
 
-Player::~Player(void)
-{
-}
+Player::~Player(void) {}
 
-void	Player::updatePos(void)
-{
-	//according to keyboard event
+void Player::setControl(Player::CONTROL ctrl) { this->control = ctrl; }
+
+void Player::updatePos(void) {
+  switch (this->control) {
+  case CONTROL_LEFT:
+    this->_x -= 1;
+    break;
+  case CONTROL_RIGHT:
+    this->_x += 1;
+    break;
+  case CONTROL_UP:
+    this->_y -= 1;
+    break;
+  case CONTROL_DOWN:
+    this->_y += 1;
+    break;
+  default:
+    break;
+  }
+  this->control = CONTROL_NONE;
 }

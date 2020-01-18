@@ -12,18 +12,21 @@
 /* ************************************************************************** */
 
 #ifndef PLAYER_HPP
-# define PLAYER_HPP
+#define PLAYER_HPP
 
-# include "Entity.hpp"
-# include <iostream>
+#include "Entity.hpp"
+#include <iostream>
 
-class Player : public Entity
-{
-	public:
-		Player(unsigned int x, unsigned int y);
-		virtual ~Player(void);
+class Player : public Entity {
+public:
+  enum CONTROL { CONTROL_NONE, CONTROL_UP, CONTROL_DOWN, CONTROL_LEFT, CONTROL_RIGHT };
+  Player(unsigned int x, unsigned int y);
+  virtual ~Player(void);
+  virtual void updatePos(void);
+  void setControl(Player::CONTROL);
 
-		virtual void	updatePos(void);
+private:
+  CONTROL control;
 };
 
 #endif
