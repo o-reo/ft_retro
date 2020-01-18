@@ -30,7 +30,7 @@ Missile::~Missile(void)
 void	Missile::updatePos(void)
 {
 	if (this->_ownerType == "Player")
-		this->_y =- 1.0 / 5;
+		this->_x += 1.0 / 5;
 	else
-		this->_y =+ 1.0 / 3;
+		this->_x -= 1.0 / 3;
 }
