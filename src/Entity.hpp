@@ -6,7 +6,7 @@
 /*   By: bpajot <bpajot@student.le-101.fr>          +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/18 11:12:54 by bpajot       #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/18 11:37:39 by bpajot      ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/01/18 12:04:07 by bpajot      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -18,12 +18,10 @@
 
 class Entity
 {
-	private:
+	protected:
 		Entity(void);
 		Entity(Entity const &src);
 		Entity &operator=(Entity const &src);
-
-	protected:
 		std::string		_type;
 		char			_c;
 		bool			_isAlive;
@@ -31,7 +29,7 @@ class Entity
 		unsigned int	_y;
 
 	public:
-		~Entity(void);
+		virtual ~Entity(void);
 
 		bool			getAlive(void);
 		unsigned int	getX(void);

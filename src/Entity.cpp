@@ -6,7 +6,21 @@
 /*   By: bpajot <bpajot@student.le-101.fr>          +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/18 11:20:04 by bpajot       #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/18 11:20:05 by bpajot      ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/01/18 11:46:42 by bpajot      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
+
+#include "Entity.hpp"
+
+Entity::Entity(void) : 	_type("Unknown"),
+						_c(' '),
+						_isAlive(true),
+						_x(0),
+						_y(0)
+{
+}
+
+Entity::~Entity(void)
+{
+}
