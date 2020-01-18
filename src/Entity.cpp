@@ -6,7 +6,7 @@
 /*   By: bpajot <bpajot@student.le-101.fr>          +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/18 11:20:04 by bpajot       #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/18 17:11:04 by bpajot      ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/01/18 18:30:19 by bpajot      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -34,12 +34,12 @@ std::string Entity::getC(void) const { return this->_c; }
 
 unsigned int Entity::getNbLive(void) const { return this->_nbLive; }
 
-unsigned int Entity::getX(void) const { return this->_x; }
+int Entity::getX(void) const { return this->_x; }
 
-unsigned int Entity::getY(void) const { return this->_y; }
+int Entity::getY(void) const { return this->_y; }
 
 void Entity::setNbLive(unsigned int nbLive) { this->_nbLive = nbLive; }
 
-void Entity::setX(unsigned int x) { this->_x = x; }
+void Entity::setX(int x) { this->_x = x; }
 
-void Entity::setY(unsigned int y) { this->_y = y; }
+void Entity::setY(int y) { this->_y = y; }

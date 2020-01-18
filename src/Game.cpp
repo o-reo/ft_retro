@@ -30,7 +30,8 @@ void Game::checkCollisions() {
   Game::EntityNode *node = this->entities;
   while (node) {
     Game::EntityNode *check_node = this->entities;
-    if (node->entity->getX() > (unsigned int)COLS || node->entity->getY() > (unsigned int)LINES) {
+    if (node->entity->getX() >= COLS || node->entity->getY() >= LINES
+      || node->entity->getX() < 0 || node->entity->getY() < 0) {
       node->entity->setNbLive(0);
       node = node->next;
       continue;
@@ -117,7 +118,7 @@ void Game::catchEvents() {
       this->player->setControl(Player::CONTROL_LEFT);
     break;
   case 67:
-    if (this->player->getX() + 1 < (unsigned int)COLS)
+    if (this->player->getX() < COLS - 1)
       this->player->setControl(Player::CONTROL_RIGHT);
     break;
   case 65:
@@ -125,7 +126,7 @@ void Game::catchEvents() {
       this->player->setControl(Player::CONTROL_UP);
     break;
   case 66:
-    if (this->player->getY() + 1 < (unsigned int)LINES)
+    if (this->player->getY() < LINES - 1)
       this->player->setControl(Player::CONTROL_DOWN);
     break;
   case 32:
