@@ -6,7 +6,7 @@
 /*   By: bpajot <bpajot@student.le-101.fr>          +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/18 11:12:54 by bpajot       #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/18 12:04:07 by bpajot      ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/01/18 13:43:55 by bpajot      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -31,9 +31,9 @@ class Entity
 	public:
 		virtual ~Entity(void);
 
-		bool			getAlive(void);
-		unsigned int	getX(void);
-		unsigned int	getY(void);
+		bool			getAlive(void) const;
+		unsigned int	getX(void) const;
+		unsigned int	getY(void) const ;
 		void			setDead(void);
 		void			setX(unsigned int x);
 		void			setY(unsigned int y);
