@@ -6,49 +6,33 @@
 /*   By: bpajot <bpajot@student.le-101.fr>          +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/18 11:20:04 by bpajot       #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/18 14:15:43 by bpajot      ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/01/18 14:34:49 by bpajot      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "Entity.hpp"
 
-Entity::Entity(void) : 	_type("Unknown"),
-						_c(" "),
-						_isAlive(true),
-						_x(0),
-						_y(0)
-{
-}
+Entity::Entity(void) : _type("Unknown"), _c(" "), _isAlive(true), _x(0), _y(0) {}
 
 Entity::~Entity(void) {}
 
 Entity::Entity(Entity const &src) { *this = src; }
 
-Entity		&Entity::operator=(Entity const &src)
-{
-	this->_type = src.getType();
-	this->_c = src.getC();
-	this->_isAlive = src.getAlive();
-	this->_x = src.getX();
-	this->_y = src.getY();
-	return *this;
+Entity &Entity::operator=(Entity const &src) {
+  this->_type = src.getType();
+  this->_c = src.getC();
+  this->_isAlive = src.getAlive();
+  this->_x = src.getX();
+  this->_y = src.getY();
+  return *this;
 }
 
-std::string		Entity::getType(void) const
-{
-	return this->_type;
-}
+std::string Entity::getType(void) const { return this->_type; }
 
-std::string		Entity::getC(void) const
-{
-	return this->_c;
-}
+std::string Entity::getC(void) const { return this->_c; }
 
-bool			Entity::getAlive(void) const
-{
-	return this->_isAlive;
-}
+bool Entity::getAlive(void) const { return this->_isAlive; }
 
 unsigned int Entity::getX(void) const { return this->_x; }
 
