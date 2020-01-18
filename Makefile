@@ -1,5 +1,5 @@
 CXX = clang++
-CXXFLAGS = -Wall -Werror -Wextra
+CXXFLAGS = -Wall -Werror -Wextra -g
 
 INCLUDES = -I src/
 RAW_SRC = main \
