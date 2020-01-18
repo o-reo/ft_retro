@@ -23,7 +23,6 @@ Game::~Game() {
 }
 
 void Game::checkCollisions() {
-  Logger *log = Logger::get();
   Game::EntityNode *node = this->entities;
   while (node) {
     Game::EntityNode *check_node = this->entities;
