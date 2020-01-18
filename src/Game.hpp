@@ -2,6 +2,9 @@
 #define GAME_HPP
 
 #include "Entity.hpp"
+#include "Missile.hpp"
+#include "Enemy.hpp"
+#include "Player.hpp"
 #include "Logger.hpp"
 #include <ncurses.h>
 #include <string>
@@ -23,7 +26,6 @@ public:
 
 protected:
   Game::EntityNode *entities;
-  Entity *EntityTypes[10];
 
 private:
   Game(Game const &src);

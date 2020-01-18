@@ -13,57 +13,29 @@
 
 #include "Entity.hpp"
 
-Entity::Entity(void) : 	_type("Unknown"),
-						_c(' '),
-						_isAlive(true),
-						_x(0),
-						_y(0)
-{
+Entity::Entity(void) : _type("Unknown"), _c(' '), _isAlive(true), _x(0), _y(0) {}
+
+Entity::~Entity(void) {}
+
+Entity::Entity(Entity const &src) { *this = src; }
+
+Entity &Entity::operator=(Entity const &src) {
+  this->_isAlive = src.getAlive();
+  this->_x = src.getX();
+  this->_y = src.getY();
+  return *this;
 }
 
-Entity::~Entity(void)
-{
-}
+const std::string &Entity::getType() { return this->_type; }
 
-Entity::Entity(Entity const &src)
-{
-	*this = src;
-}
+bool Entity::getAlive(void) const { return this->_isAlive; }
 
-Entity		&Entity::operator=(Entity const &src)
-{
-	this->_isAlive = src.getAlive();
-	this->_x = src.getX();
-	this->_y = src.getY();
-	return *this;
-}
+unsigned int Entity::getX(void) const { return this->_x; }
 
-bool			Entity::getAlive(void) const
-{
-	return this->_isAlive;
-}
+unsigned int Entity::getY(void) const { return this->_y; }
 
-unsigned int	Entity::getX(void) const
-{
-	return this->_x;
-}
+void Entity::setDead(void) { this->_isAlive = false; }
 
-unsigned int	Entity::getY(void) const
-{
-	return this->_y;
-}
+void Entity::setX(unsigned int x) { this->_x = x; }
 
-void		Entity::setDead(void)
-{
-	this->_isAlive = false;
-}
-
-void		Entity::setX(unsigned int x)
-{
-	this->_x = x;
-}
-
-void		Entity::setY(unsigned int y)
-{
-	this->_y = y;
-}
+void Entity::setY(unsigned int y) { this->_y = y; }

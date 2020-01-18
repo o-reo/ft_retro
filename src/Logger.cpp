@@ -5,7 +5,7 @@ size_t Logger::linecount = 0;
 
 Logger::Logger() {
   this->file.open("game.log");
-  if (this->file.is_open()) {
+  if (!this->file.is_open()) {
     std::cout << "Could not initialize the logger" << std::endl;
   }
 }

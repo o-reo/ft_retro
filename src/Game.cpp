@@ -3,6 +3,7 @@
 Game::Game() : entities(nullptr) {
   initscr();
   noecho();
+  cbreak();
   Logger *log = Logger::get();
   log->out() << "Initializing window" << std::endl;
 }
@@ -24,6 +25,8 @@ void Game::checkCollisions() {
       }
       check_node = check_node->next;
     }
+    Logger *log = Logger::get();
+    log->out() << "checking collision on: " << node->entity->getType() << std::endl;
     node = node->next;
   }
 }
@@ -58,12 +61,20 @@ Entity *Game::buildEntity(const std::string &type) {
   Game::EntityNode *node = this->entities;
   Game::EntityNode *newNode = new Game::EntityNode;
   newNode->next = nullptr;
-  newNode->entity = new Entity("");
+  if (type == "Missile") {
+    newNode->entity = new Missile(0, 0);
+  } else if (type == "Enemy") {
+    newNode->entity = new Enemy(0, 0);
+  } else if (type == "Player") {
+    newNode->entity = new Player(0, 0);
+  }
   if (!node) {
     this->entities = newNode;
+    return newNode->entity;
   }
   while (node->next)
     node = node->next;
+  node->next = newNode;
   return newNode->entity;
 }
 
@@ -72,8 +83,9 @@ void Game::loop() {
   while (true) {
     this->purgeEntities();
     Game::EntityNode *node = this->entities;
+    // log->out() << getch() << std::endl;
     switch (getch()) {
-    case 27:
+    case 113:
       return;
     default:
       break;
