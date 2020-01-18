@@ -7,6 +7,11 @@ Game::Game() : entities(nullptr), end(false) {
   clear();
   timeout(0);
   curs_set(0);
+  start_color();
+  init_pair(Game::COLOR_ANGRY, COLOR_RED, COLOR_BLACK);
+  init_pair(Game::COLOR_CONSTIPATED, COLOR_YELLOW, COLOR_BLACK);
+  init_pair(Game::COLOR_CALM, COLOR_GREEN, COLOR_BLACK);
+
   this->player = (Player *)this->buildEntity("Player");
   Logger *log = Logger::get();
   log->out() << "Initializing window" << std::endl;
@@ -75,10 +80,12 @@ Entity *Game::buildEntity(const std::string &type) {
   newNode->next = nullptr;
   if (type == "Missile") {
     newNode->entity = new Missile(COLS / 3, LINES / 2, "Player");
+    newNode->entity->setColor(COLOR_ANGRY);
   } else if (type == "Enemy") {
     newNode->entity = new Enemy(3 * COLS / 4, rand() % LINES);
   } else if (type == "Player") {
     newNode->entity = new Player(COLS / 3, LINES / 2);
+    newNode->entity->setColor(COLOR_CONSTIPATED);
   }
   if (!node) {
     this->entities = newNode;
@@ -94,7 +101,9 @@ void Game::update() {
   Game::EntityNode *node = this->entities;
   while (node) {
     // Move cursor and print the asset
+    attron(COLOR_PAIR(node->entity->getColor()));
     mvaddch(node->entity->getY(), node->entity->getX(), node->entity->getC()[0]);
+    attroff(COLOR_PAIR(node->entity->getColor()));
     node->entity->updatePos();
     node = node->next;
   }

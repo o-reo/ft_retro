@@ -18,6 +18,12 @@ public:
     Entity *entity;
     EntityNode *next;
   };
+  enum COLORS {
+    COLOR_NONE,
+    COLOR_ANGRY,
+    COLOR_CALM,
+    COLOR_CONSTIPATED
+  };
 
   Game();
   ~Game();

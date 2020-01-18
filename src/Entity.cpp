@@ -38,6 +38,10 @@ unsigned int Entity::getX(void) const { return this->_x; }
 
 unsigned int Entity::getY(void) const { return this->_y; }
 
+unsigned int Entity::getColor(void) const { return this->_color; }
+
+void Entity::setColor(unsigned int color) { this->_color = color; }
+
 void Entity::setDead(void) { this->_isAlive = false; }
 
 void Entity::setX(unsigned int x) { this->_x = x; }
