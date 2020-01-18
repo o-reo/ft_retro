@@ -1,6 +1,8 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#include <chrono>
+#include <thread>
 #include "Entity.hpp"
 #include "Missile.hpp"
 #include "Enemy.hpp"

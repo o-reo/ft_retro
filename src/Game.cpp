@@ -5,13 +5,17 @@ Game::Game() : entities(nullptr) {
   noecho();
   cbreak();
   clear();
-  timeout(-1);
+  timeout(0);
   curs_set(0);
   Logger *log = Logger::get();
   log->out() << "Initializing window" << std::endl;
 }
 
 Game::~Game() {
+  Game::EntityNode *node = this->entities;
+  while (node) {
+    node = this->destroyEntityNode(node);
+  }
   endwin();
   Logger *log = Logger::get();
   log->out() << "Closing window" << std::endl;
@@ -83,17 +87,19 @@ Entity *Game::buildEntity(const std::string &type) {
 
 void Game::loop() {
   // Logger *log = Logger::get();
-  this->buildEntity("Enemy");
   while (true) {
+    erase();
     this->purgeEntities();
-    Game::EntityNode *node = this->entities;
     // log->out() << getch() << std::endl;
     switch (getch()) {
     case 113:
       return;
+    case 27:
+      this->entities->entity->setDead();
     default:
       break;
     }
+    Game::EntityNode *node = this->entities;
     while (node) {
       // Move cursor and print the asset
       mvaddch(node->entity->getY(), node->entity->getX(), node->entity->getC()[0]);
@@ -101,5 +107,6 @@ void Game::loop() {
     }
     this->checkCollisions();
     refresh();
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
   }
 }
