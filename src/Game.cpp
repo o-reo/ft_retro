@@ -1,6 +1,6 @@
 #include "Game.hpp"
 
-Game::Game() : entities(nullptr), end(false) {
+Game::Game() : entities(nullptr), end(false), score(0), scorebar(3) {
   initscr();
   noecho();
   cbreak();
@@ -11,6 +11,9 @@ Game::Game() : entities(nullptr), end(false) {
   init_pair(Game::COLOR_ANGRY, COLOR_RED, COLOR_BLACK);
   init_pair(Game::COLOR_CONSTIPATED, COLOR_YELLOW, COLOR_BLACK);
   init_pair(Game::COLOR_CALM, COLOR_GREEN, COLOR_BLACK);
+
+  this->topbar = subwin(stdscr, this->scorebar, COLS, 0, 0);
+  this->mainwin = subwin(stdscr, LINES - this->scorebar, COLS, this->scorebar, 0);
 
   this->player = (Player *)this->buildEntity("Player");
   int i = -1;
@@ -36,17 +39,18 @@ Game::~Game() {
 void Game::checkCollisions() {
   Game::EntityNode *node = this->entities;
   while (node) {
-    Game::EntityNode *check_node = this->entities;
-    if (node->entity->getX() >= COLS || node->entity->getY() >= LINES
-      || node->entity->getX() < 0 || node->entity->getY() < 0) {
+    if (node->entity->getX() >= COLS || node->entity->getY() >= (LINES - this->scorebar) || node->entity->getX() < 0 ||
+        node->entity->getY() < 0) {
       node->entity->setNbLive(0);
       node = node->next;
       continue;
     }
+    Game::EntityNode *check_node = this->entities;
     while (check_node) {
       if (check_node != node && check_node->entity->getX() == node->entity->getX() &&
           check_node->entity->getY() == node->entity->getY()) {
-        node->entity->setNbLive(node->entity->getNbLive() - 1);
+        node->entity->setNbLive(std::max(node->entity->getNbLive(), 1u) - 1);
+        this->score++;
         if (node->entity->getType() == "Player" && node->entity->getNbLive() == 0)
           this->end = true;
         break;
@@ -75,7 +79,7 @@ Game::EntityNode *Game::destroyEntityNode(EntityNode *node) {
 void Game::purgeEntities() {
   Game::EntityNode *node = this->entities;
   while (node) {
-    if (!node->entity->getNbLive() && node->entity->getType() != "Player") {
+    if (node->entity->getNbLive() <= 0 && node->entity->getType() != "Player") {
       node = this->destroyEntityNode(node);
     } else {
       node = node->next;
@@ -88,12 +92,12 @@ Entity *Game::buildEntity(const std::string &type) {
   Game::EntityNode *newNode = new Game::EntityNode;
   newNode->next = nullptr;
   if (type == "Missile") {
-    newNode->entity = new Missile(COLS / 5, LINES / 2, "Player");
+    newNode->entity = new Missile(COLS / 5, (LINES - this->scorebar) / 2, "Player");
     newNode->entity->setColor(COLOR_ANGRY);
   } else if (type == "Enemy") {
-    newNode->entity = new Enemy(3 * COLS / 4 + rand() % (COLS / 4), rand() % LINES);
+    newNode->entity = new Enemy(3 * COLS / 4 + rand() % (COLS / 4), rand() % (LINES - this->scorebar));
   } else if (type == "Player") {
-    newNode->entity = new Player(COLS / 5, LINES / 2);
+    newNode->entity = new Player(COLS / 5, (LINES - this->scorebar) / 2);
     newNode->entity->setColor(COLOR_CONSTIPATED);
   }
   if (!node) {
@@ -110,9 +114,9 @@ void Game::update() {
   Game::EntityNode *node = this->entities;
   while (node) {
     // Move cursor and print the asset
-    attron(COLOR_PAIR(node->entity->getColor()));
-    mvaddch(node->entity->getY(), node->entity->getX(), node->entity->getC()[0]);
-    attroff(COLOR_PAIR(node->entity->getColor()));
+    wattron(this->mainwin, COLOR_PAIR(node->entity->getColor()));
+    mvwaddch(this->mainwin, node->entity->getY(), node->entity->getX(), node->entity->getC()[0]);
+    wattroff(this->mainwin, COLOR_PAIR(node->entity->getColor()));
     node->entity->updatePos();
     node = node->next;
   }
@@ -137,7 +141,7 @@ void Game::catchEvents() {
       this->player->setControl(Player::CONTROL_UP);
     break;
   case 66:
-    if (this->player->getY() < LINES - 1)
+    if (this->player->getY() < (LINES - this->scorebar - 1))
       this->player->setControl(Player::CONTROL_DOWN);
     break;
   case 32:
@@ -153,14 +157,20 @@ void Game::catchEvents() {
 void Game::loop() {
   // Logger *log = Logger::get();
   while (!this->end) {
-    erase();
+    // Score
+    werase(this->topbar);
+    box(this->topbar, ACS_VLINE, ACS_HLINE);
+    mvwprintw(this->topbar, 1, 1, "Score: %i", this->score);
+    wrefresh(this->topbar);
+
+    werase(this->mainwin);
     this->purgeEntities();
     // log->out() << getch() << std::endl;
     this->catchEvents();
     this->update();
     this->checkCollisions();
-    refresh();
-    clock_t   tac,tic; 
+    wrefresh(this->mainwin);
+    clock_t tac, tic;
     tic = tac = clock();
     while (tac - tic < CLOCKS_PER_SEC / 100)
       tac = clock();

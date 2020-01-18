@@ -17,12 +17,7 @@ public:
     Entity *entity;
     EntityNode *next;
   };
-  enum COLORS {
-    COLOR_NONE,
-    COLOR_ANGRY,
-    COLOR_CALM,
-    COLOR_CONSTIPATED
-  };
+  enum COLORS { COLOR_NONE, COLOR_ANGRY, COLOR_CALM, COLOR_CONSTIPATED };
 
   Game();
   ~Game();
@@ -42,6 +37,10 @@ private:
   Game &operator=(Game const &src);
   EntityNode *destroyEntityNode(EntityNode *);
   void update();
+  WINDOW *topbar;
+  WINDOW *mainwin;
+  int score;
+  const int scorebar;
 };
 
 #endif
