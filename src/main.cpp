@@ -6,7 +6,7 @@
 /*   By: bpajot <bpajot@student.le-101.fr>          +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/18 13:11:25 by bpajot       #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/18 13:12:48 by bpajot      ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/01/18 13:22:25 by bpajot      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -23,7 +23,7 @@ int main(void)
 	Enemy e2(10, 8);
     
     initscr();
-    printw("Hello");
+    printw("Hello, SIZE_X=%d SIZE_Y=%d", LINES, COLS);
     refresh();
     getch();
     endwin();

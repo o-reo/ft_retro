@@ -10,7 +10,7 @@ SRC = 	src/main.cpp \
 LD_FLAGS = -lncurses
 INCLUDES = src/
 OBJ = $(SRC:src/.cpp=build/.o)
-EXEC = retro
+EXEC = ft_retro
 
 all: $(EXEC)
 
