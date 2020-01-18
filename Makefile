@@ -1,7 +1,11 @@
 CXX = clang++
 CXXFLAGS = -Wall -Werror -Wextra
 
-SRC = src/main.cpp
+SRC = 	src/main.cpp \
+		src/Entity.cpp \
+		src/Player.cpp \
+		src/Enemy.cpp \
+		src/Missile.cpp
 
 LD_FLAGS = -lncurses
 INCLUDES = src/
