@@ -33,3 +33,5 @@
 retro
 build/*
 !build/.gitkeep
+
+.vscode/
