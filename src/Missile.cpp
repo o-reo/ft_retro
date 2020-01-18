@@ -6,7 +6,7 @@
 /*   By: bpajot <bpajot@student.le-101.fr>          +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/18 12:54:19 by bpajot       #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/18 12:59:33 by bpajot      ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/01/18 14:03:08 by bpajot      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -16,7 +16,7 @@
 Missile::Missile(unsigned int x, unsigned int y) : Entity()
 {
 	this->_type = "Missile";
-	this->_c = '-';
+	this->_c = "-";
 	this->_isAlive = true;
 	this->_x = x;
 	this->_y= y;

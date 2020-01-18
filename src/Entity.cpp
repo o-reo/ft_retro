@@ -6,7 +6,7 @@
 /*   By: bpajot <bpajot@student.le-101.fr>          +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/18 11:20:04 by bpajot       #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/18 13:44:48 by bpajot      ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/01/18 14:07:51 by bpajot      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -14,7 +14,7 @@
 #include "Entity.hpp"
 
 Entity::Entity(void) : 	_type("Unknown"),
-						_c(' '),
+						_c(" "),
 						_isAlive(true),
 						_x(0),
 						_y(0)
@@ -36,6 +36,16 @@ Entity		&Entity::operator=(Entity const &src)
 	this->_x = src.getX();
 	this->_y = src.getY();
 	return *this;
+}
+
+std::string		Entity::getType(void) const
+{
+	return this->_type;
+}
+
+std::string		Entity::getC(void) const
+{
+	return this->_c;
 }
 
 bool			Entity::getAlive(void) const
