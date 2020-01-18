@@ -21,7 +21,7 @@ Game::~Game() {
   Logger *log = Logger::get();
   Game::EntityNode *node = this->entities;
   while (node) {
-    node = this->destroyEntityNode(node);
+    this->destroyEntityNode(node);
     node = node->next;
   }
   endwin();
