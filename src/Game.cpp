@@ -18,12 +18,13 @@ Game::Game() : entities(nullptr), end(false) {
 }
 
 Game::~Game() {
+  Logger *log = Logger::get();
   Game::EntityNode *node = this->entities;
   while (node) {
     node = this->destroyEntityNode(node);
+    node = node->next;
   }
   endwin();
-  Logger *log = Logger::get();
   log->out() << "Closing window" << std::endl;
 }
 
@@ -49,9 +50,9 @@ void Game::checkCollisions() {
 }
 
 Game::EntityNode *Game::destroyEntityNode(EntityNode *node) {
+  Game::EntityNode *pnode = this->entities;
   if (node == this->entities)
     this->entities = node->next;
-  Game::EntityNode *pnode = this->entities;
   while (pnode && pnode->next) {
     if (pnode->next == node) {
       pnode->next = node->next;
