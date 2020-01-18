@@ -6,13 +6,15 @@
 /*   By: bpajot <bpajot@student.le-101.fr>          +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/18 11:12:54 by bpajot       #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/18 11:28:11 by bpajot      ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/01/18 11:37:39 by bpajot      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #ifndef ENTITY_HPP
 # define ENTITY_HPP
+
+#include <iostream>
 
 class Entity
 {
@@ -22,6 +24,7 @@ class Entity
 		Entity &operator=(Entity const &src);
 
 	protected:
+		std::string		_type;
 		char			_c;
 		bool			_isAlive;
 		unsigned int	_x;
