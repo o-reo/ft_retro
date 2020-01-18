@@ -23,6 +23,7 @@ Game::~Game() {
   endwin();
   Logger *log = Logger::get();
   log->out() << "Closing window" << std::endl;
+  this->end = true;
 }
 
 void Game::checkCollisions() {
@@ -38,6 +39,8 @@ void Game::checkCollisions() {
       if (check_node != node && check_node->entity->getX() == node->entity->getX() &&
           check_node->entity->getY() == node->entity->getY()) {
         node->entity->setNbLive(node->entity->getNbLive() - 1);
+        if (node->entity->getType() == "Player" && node->entity->getNbLive() == 0)
+          Game::~Game();
         break;
       }
       check_node = check_node->next;
@@ -107,7 +110,7 @@ void Game::catchEvents() {
   Entity *miss = nullptr;
   switch (getch()) {
   case 113:
-    end = true;
+    Game::~Game();
     break;
   case 68:
     if (this->player->getX() > 0)
