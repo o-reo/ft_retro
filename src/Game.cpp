@@ -27,7 +27,7 @@ void Game::checkCollisions() {
   while (node) {
     Game::EntityNode *check_node = this->entities;
     if (node->entity->getX() > (unsigned int)COLS || node->entity->getY() > (unsigned int)LINES) {
-      node->entity->setDead();
+      node->entity->setNbLive(0);
       node = node->next;
       continue;
     }
