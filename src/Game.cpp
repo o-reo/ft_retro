@@ -1,12 +1,13 @@
 #include "Game.hpp"
 
-Game::Game() : entities(nullptr) {
+Game::Game() : entities(nullptr), end(false) {
   initscr();
   noecho();
   cbreak();
   clear();
   timeout(0);
   curs_set(0);
+  this->player = (Player *)this->buildEntity("Player");
   Logger *log = Logger::get();
   log->out() << "Initializing window" << std::endl;
 }
@@ -33,8 +34,6 @@ void Game::checkCollisions() {
       }
       check_node = check_node->next;
     }
-    Logger *log = Logger::get();
-    log->out() << "checking collision on: " << node->entity->getType() << std::endl;
     node = node->next;
   }
 }
@@ -86,28 +85,52 @@ Entity *Game::buildEntity(const std::string &type) {
   return newNode->entity;
 }
 
+void Game::update() {
+  Game::EntityNode *node = this->entities;
+  while (node) {
+    // Move cursor and print the asset
+    mvaddch(node->entity->getY(), node->entity->getX(), node->entity->getC()[0]);
+    node->entity->updatePos();
+    node = node->next;
+  }
+}
+
+void Game::catchEvents() {
+  switch (getch()) {
+  case 113:
+    end = true;
+    break;
+  case 68:
+    if (this->player->getX() > 0)
+      this->player->setControl(Player::CONTROL_LEFT);
+    break;
+  case 67:
+    if (this->player->getX() + 1 < (unsigned int)COLS)
+      this->player->setControl(Player::CONTROL_RIGHT);
+    break;
+  case 65:
+    if (this->player->getY() > 0)
+      this->player->setControl(Player::CONTROL_UP);
+    break;
+  case 66:
+    if (this->player->getY() + 1 < (unsigned int)LINES)
+      this->player->setControl(Player::CONTROL_DOWN);
+    break;
+  default:
+    break;
+  }
+}
+
 void Game::loop() {
   // Logger *log = Logger::get();
-  while (true) {
+  while (!this->end) {
     erase();
     this->purgeEntities();
     // log->out() << getch() << std::endl;
-    switch (getch()) {
-    case 113:
-      return;
-    case 27:
-      this->entities->entity->setDead();
-    default:
-      break;
-    }
-    Game::EntityNode *node = this->entities;
-    while (node) {
-      // Move cursor and print the asset
-      mvaddch(node->entity->getY(), node->entity->getX(), node->entity->getC()[0]);
-      node = node->next;
-    }
+    this->catchEvents();
+    this->update();
     this->checkCollisions();
     refresh();
-    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
   }
 }
