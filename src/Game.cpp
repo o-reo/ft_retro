@@ -142,6 +142,9 @@ void Game::loop() {
     this->update();
     this->checkCollisions();
     refresh();
-    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    clock_t   tac,tic; 
+    tic = tac = clock();
+    while (tac - tic < CLOCKS_PER_SEC / 100)
+      tac = clock();
   }
 }

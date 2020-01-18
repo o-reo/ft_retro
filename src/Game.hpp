@@ -6,10 +6,9 @@
 #include "Logger.hpp"
 #include "Missile.hpp"
 #include "Player.hpp"
-#include <chrono>
 #include <ncurses.h>
 #include <string>
-#include <thread>
+#include <time.h>
 
 class Game {
 
