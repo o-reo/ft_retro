@@ -13,7 +13,7 @@ SRC = $(addprefix src/, $(addsuffix .cpp, $(RAW_SRC)))
 OBJ = $(addprefix build/, $(addsuffix .o, $(RAW_SRC)))
 LDLIBS = -lncurses
 
-EXEC = retro
+EXEC = ft_retro
 
 all: $(EXEC)
 
