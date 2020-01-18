@@ -1,10 +1,7 @@
-#include <ncurses.h>
+#include "Game.hpp"
 
 int main(void)
 {
-    initscr();
-    printw("Hello");
-    refresh();
-    getch();
-    endwin();
+  Game game;
+  game.loop();
 }

@@ -1,19 +1,20 @@
 CXX = clang++
 CXXFLAGS = -Wall -Werror -Wextra
 
-SRC = src/main.cpp
+INCLUDES = -I src/
+RAW_SRC = main Game Logger Entity
+SRC = $(addprefix src/, $(addsuffix .cpp, $(RAW_SRC)))
+OBJ = $(addprefix build/, $(addsuffix .o, $(RAW_SRC)))
+LDLIBS = -lncurses
 
-LD_FLAGS = -lncurses
-INCLUDES = src/
-OBJ = $(SRC:src/.cpp=build/.o)
 EXEC = retro
 
 all: $(EXEC)
 
 $(EXEC): $(OBJ)
-		$(CXX) $(CXXFLAGS) -o $@ $(OBJ) $(LD_FLAGS)
+	$(CXX) $(CXXFLAGS) -o $@ $(OBJ) $(LDLIBS)
 
-%.o: %.cpp
+./build/%.o: ./src/%.cpp
 	$(CXX) $(CXXFLAGS) -o $@ -c $< $(INCLUDES)
 
 clean:

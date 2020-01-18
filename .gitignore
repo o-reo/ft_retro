@@ -33,3 +33,4 @@
 retro
 build/*
 !build/.gitkeep
+*.log
