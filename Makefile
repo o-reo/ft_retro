@@ -2,7 +2,13 @@ CXX = clang++
 CXXFLAGS = -Wall -Werror -Wextra
 
 INCLUDES = -I src/
-RAW_SRC = main Game Logger Entity
+RAW_SRC = main \
+					Game \
+					Logger \
+					Entity \
+					Player \
+					Enemy \
+					Missile
 SRC = $(addprefix src/, $(addsuffix .cpp, $(RAW_SRC)))
 OBJ = $(addprefix build/, $(addsuffix .o, $(RAW_SRC)))
 LDLIBS = -lncurses

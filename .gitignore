@@ -30,7 +30,8 @@
 *.exe
 *.out
 *.app
-retro
+ft_retro
 build/*
 !build/.gitkeep
 *.log
+.vscode/

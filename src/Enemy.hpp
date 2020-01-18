@@ -1,43 +1,29 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   Entity.hpp                                       .::    .:/ .      .::   */
+/*   Enemy.hpp                                        .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
 /*   By: bpajot <bpajot@student.le-101.fr>          +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2020/01/18 11:12:54 by bpajot       #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/18 13:43:55 by bpajot      ###    #+. /#+    ###.fr     */
+/*   Created: 2020/01/18 11:54:30 by bpajot       #+#   ##    ##    #+#       */
+/*   Updated: 2020/01/18 13:12:29 by bpajot      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#ifndef ENTITY_HPP
-# define ENTITY_HPP
+#ifndef ENEMY_HPP
+# define ENEMY_HPP
 
-#include <iostream>
+# include "Entity.hpp"
+# include <iostream>
 
-class Entity
+class Enemy : public Entity
 {
-	protected:
-		Entity(void);
-		Entity(Entity const &src);
-		Entity &operator=(Entity const &src);
-		std::string		_type;
-		char			_c;
-		bool			_isAlive;
-		unsigned int	_x;
-		unsigned int	_y;
-
 	public:
-		virtual ~Entity(void);
+		Enemy(unsigned int x, unsigned int y);
+		virtual ~Enemy(void);
 
-		bool			getAlive(void) const;
-		unsigned int	getX(void) const;
-		unsigned int	getY(void) const ;
-		void			setDead(void);
-		void			setX(unsigned int x);
-		void			setY(unsigned int y);
-		virtual void	updatePos(void) = 0;
+		virtual void	updatePos(void);
 };
 
 #endif
