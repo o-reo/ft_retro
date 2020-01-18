@@ -8,6 +8,9 @@ Game::Game() : entities(nullptr), end(false) {
   timeout(0);
   curs_set(0);
   this->player = (Player *)this->buildEntity("Player");
+  int i = -1;
+  while (++i < 100)
+    this->buildEntity("Enemy");
   Logger *log = Logger::get();
   log->out() << "Initializing window" << std::endl;
 }
@@ -74,11 +77,11 @@ Entity *Game::buildEntity(const std::string &type) {
   Game::EntityNode *newNode = new Game::EntityNode;
   newNode->next = nullptr;
   if (type == "Missile") {
-    newNode->entity = new Missile(COLS / 3, LINES / 2, "Player");
+    newNode->entity = new Missile(COLS / 5, LINES / 2, "Player");
   } else if (type == "Enemy") {
-    newNode->entity = new Enemy(3 * COLS / 4, rand() % LINES);
+    newNode->entity = new Enemy(3 * COLS / 4 + rand() % (COLS / 4), rand() % LINES);
   } else if (type == "Player") {
-    newNode->entity = new Player(COLS / 3, LINES / 2);
+    newNode->entity = new Player(COLS / 5, LINES / 2);
   }
   if (!node) {
     this->entities = newNode;
