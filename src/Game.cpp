@@ -26,8 +26,9 @@ void Game::checkCollisions() {
   while (node) {
     Game::EntityNode *check_node = this->entities;
     while (check_node) {
-      if (check_node == node) {
-        // node->entity->setDead();
+      if (check_node->entity->getX() == node->entity->getX()
+        && check_node->entity->getY() == node->entity->getY()) {
+        node->entity->setDead();
         break;
       }
       check_node = check_node->next;
