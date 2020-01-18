@@ -6,7 +6,7 @@
 /*   By: bpajot <bpajot@student.le-101.fr>          +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/18 11:12:54 by bpajot       #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/18 14:08:03 by bpajot      ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/01/18 15:17:00 by bpajot      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -25,8 +25,8 @@ class Entity
 		std::string		_type;
 		std::string		_c;
 		bool			_isAlive;
-		unsigned int	_x;
-		unsigned int	_y;
+		float			_x;
+		float			_y;
 
 public:
   virtual ~Entity(void);
