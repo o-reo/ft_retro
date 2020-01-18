@@ -26,6 +26,11 @@ void Game::checkCollisions() {
   Game::EntityNode *node = this->entities;
   while (node) {
     Game::EntityNode *check_node = this->entities;
+    if (node->entity->getX() > (unsigned int)COLS || node->entity->getY() > (unsigned int)LINES) {
+      node->entity->setDead();
+      node = node->next;
+      continue;
+    }
     while (check_node) {
       if (check_node != node && check_node->entity->getX() == node->entity->getX() &&
           check_node->entity->getY() == node->entity->getY()) {
@@ -39,9 +44,9 @@ void Game::checkCollisions() {
 }
 
 Game::EntityNode *Game::destroyEntityNode(EntityNode *node) {
-  Game::EntityNode *pnode = this->entities;
   if (node == this->entities)
     this->entities = node->next;
+  Game::EntityNode *pnode = this->entities;
   while (pnode && pnode->next) {
     if (pnode->next == node) {
       pnode->next = node->next;
@@ -50,13 +55,13 @@ Game::EntityNode *Game::destroyEntityNode(EntityNode *node) {
   }
   delete node->entity;
   delete node;
-  return pnode->next;
+  return pnode ? pnode->next : nullptr;
 }
 
 void Game::purgeEntities() {
   Game::EntityNode *node = this->entities;
   while (node) {
-    if (!node->entity->getNbLive()) {
+    if (!node->entity->getNbLive() && node->entity->getType() != "Player") {
       node = this->destroyEntityNode(node);
     } else {
       node = node->next;
@@ -96,6 +101,7 @@ void Game::update() {
 }
 
 void Game::catchEvents() {
+  Entity *miss = nullptr;
   switch (getch()) {
   case 113:
     end = true;
@@ -115,6 +121,11 @@ void Game::catchEvents() {
   case 66:
     if (this->player->getY() + 1 < (unsigned int)LINES)
       this->player->setControl(Player::CONTROL_DOWN);
+    break;
+  case 32:
+    miss = this->buildEntity("Missile");
+    miss->setX(this->player->getX() + 1);
+    miss->setY(this->player->getY());
     break;
   default:
     break;
