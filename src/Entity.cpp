@@ -6,14 +6,14 @@
 /*   By: bpajot <bpajot@student.le-101.fr>          +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/18 11:20:04 by bpajot       #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/18 14:34:49 by bpajot      ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/01/18 16:46:59 by bpajot      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "Entity.hpp"
 
-Entity::Entity(void) : _type("Unknown"), _c(" "), _isAlive(true), _x(0), _y(0) {}
+Entity::Entity(void) : _type("Unknown"), _c(" "), _isAlive(true), _x(0), _y(0), _dx(0), _dy(0) {}
 
 Entity::~Entity(void) {}
 

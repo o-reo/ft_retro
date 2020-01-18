@@ -3,6 +3,7 @@
 #include <string.h>
 
 void print_in_middle(WINDOW *win, int starty, int startx, int width, char *string);
+
 int main(int argc, char *argv[])
 {	initscr();			/* Start curses mode 		*/
 	if(has_colors() == FALSE)
@@ -19,6 +20,7 @@ int main(int argc, char *argv[])
     	getch();
 	endwin();
 }
+
 void print_in_middle(WINDOW *win, int starty, int startx, int width, char *string)
 {	int length, x, y;
 	float temp;

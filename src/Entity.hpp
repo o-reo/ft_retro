@@ -6,7 +6,7 @@
 /*   By: bpajot <bpajot@student.le-101.fr>          +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/18 11:12:54 by bpajot       #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/18 15:17:00 by bpajot      ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/01/18 16:45:47 by bpajot      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -27,6 +27,8 @@ class Entity
 		bool			_isAlive;
 		float			_x;
 		float			_y;
+		float			_dx;
+		float			_dy;
 
 public:
   virtual ~Entity(void);
