@@ -12,7 +12,7 @@
 /* ************************************************************************** */
 
 #ifndef ENTITY_HPP
-# define ENTITY_HPP
+#define ENTITY_HPP
 
 #include <iostream>
 
@@ -28,8 +28,8 @@ class Entity
 		unsigned int	_x;
 		unsigned int	_y;
 
-	public:
-		virtual ~Entity(void);
+public:
+  virtual ~Entity(void);
 
 		std::string		getType(void) const;
 		std::string		getC(void) const;

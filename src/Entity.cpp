@@ -6,76 +6,40 @@
 /*   By: bpajot <bpajot@student.le-101.fr>          +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/18 11:20:04 by bpajot       #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/18 14:15:43 by bpajot      ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/01/18 14:34:49 by bpajot      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "Entity.hpp"
 
-Entity::Entity(void) : 	_type("Unknown"),
-						_c(" "),
-						_isAlive(true),
-						_x(0),
-						_y(0)
-{
+Entity::Entity(void) : _type("Unknown"), _c(" "), _isAlive(true), _x(0), _y(0) {}
+
+Entity::~Entity(void) {}
+
+Entity::Entity(Entity const &src) { *this = src; }
+
+Entity &Entity::operator=(Entity const &src) {
+  this->_type = src.getType();
+  this->_c = src.getC();
+  this->_isAlive = src.getAlive();
+  this->_x = src.getX();
+  this->_y = src.getY();
+  return *this;
 }
 
-Entity::~Entity(void)
-{
-}
+std::string Entity::getType(void) const { return this->_type; }
 
-Entity::Entity(Entity const &src)
-{
-	*this = src;
-}
+std::string Entity::getC(void) const { return this->_c; }
 
-Entity		&Entity::operator=(Entity const &src)
-{
-	this->_type = src.getType();
-	this->_c = src.getC();
-	this->_isAlive = src.getAlive();
-	this->_x = src.getX();
-	this->_y = src.getY();
-	return *this;
-}
+bool Entity::getAlive(void) const { return this->_isAlive; }
 
-std::string		Entity::getType(void) const
-{
-	return this->_type;
-}
+unsigned int Entity::getX(void) const { return this->_x; }
 
-std::string		Entity::getC(void) const
-{
-	return this->_c;
-}
+unsigned int Entity::getY(void) const { return this->_y; }
 
-bool			Entity::getAlive(void) const
-{
-	return this->_isAlive;
-}
+void Entity::setDead(void) { this->_isAlive = false; }
 
-unsigned int	Entity::getX(void) const
-{
-	return this->_x;
-}
+void Entity::setX(unsigned int x) { this->_x = x; }
 
-unsigned int	Entity::getY(void) const
-{
-	return this->_y;
-}
-
-void		Entity::setDead(void)
-{
-	this->_isAlive = false;
-}
-
-void		Entity::setX(unsigned int x)
-{
-	this->_x = x;
-}
-
-void		Entity::setY(unsigned int y)
-{
-	this->_y = y;
-}
+void Entity::setY(unsigned int y) { this->_y = y; }

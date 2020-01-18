@@ -33,5 +33,6 @@
 ft_retro
 build/*
 !build/.gitkeep
-
+*.log
 .vscode/
+retro
