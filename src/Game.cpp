@@ -61,7 +61,7 @@ Game::EntityNode *Game::destroyEntityNode(EntityNode *node) {
 void Game::purgeEntities() {
   Game::EntityNode *node = this->entities;
   while (node) {
-    if (!node->entity->getAlive()) {
+    if (!node->entity->getAlive() && node->entity->getType() != "Player") {
       node = this->destroyEntityNode(node);
     } else {
       node = node->next;
