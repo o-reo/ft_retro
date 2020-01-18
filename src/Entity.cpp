@@ -6,7 +6,7 @@
 /*   By: bpajot <bpajot@student.le-101.fr>          +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/18 11:20:04 by bpajot       #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/18 14:07:51 by bpajot      ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/01/18 14:15:43 by bpajot      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -32,6 +32,8 @@ Entity::Entity(Entity const &src)
 
 Entity		&Entity::operator=(Entity const &src)
 {
+	this->_type = src.getType();
+	this->_c = src.getC();
 	this->_isAlive = src.getAlive();
 	this->_x = src.getX();
 	this->_y = src.getY();
