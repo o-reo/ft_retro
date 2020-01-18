@@ -6,7 +6,7 @@
 /*   By: bpajot <bpajot@student.le-101.fr>          +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/18 11:52:21 by bpajot       #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/18 12:48:02 by bpajot      ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/01/18 12:57:40 by bpajot      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -24,4 +24,9 @@ Player::Player(unsigned int x, unsigned int y) :	Entity()
 
 Player::~Player(void)
 {
+}
+
+void	Player::updatePos(void)
+{
+	//according to keyboard event
 }

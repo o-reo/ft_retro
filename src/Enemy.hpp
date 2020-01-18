@@ -6,7 +6,7 @@
 /*   By: bpajot <bpajot@student.le-101.fr>          +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/18 11:54:30 by bpajot       #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/18 12:49:06 by bpajot      ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/01/18 12:57:34 by bpajot      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -22,6 +22,8 @@ class Enemy : public Entity
 	public:
 		Enemy(unsigned int x, unsigned int y);
 		virtual ~Enemy(void);
+
+		virtual void	updatePos(void) = 0;
 };
 
 #endif

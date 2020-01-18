@@ -6,7 +6,7 @@
 /*   By: bpajot <bpajot@student.le-101.fr>          +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/18 11:55:21 by bpajot       #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/18 12:50:12 by bpajot      ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/01/18 12:58:34 by bpajot      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -24,4 +24,9 @@ Enemy::Enemy(unsigned int x, unsigned int y)
 
 Enemy::~Enemy(void)
 {
+}
+
+void	Enemy::updatePos(void)
+{
+	this->_x--;
 }
