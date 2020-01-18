@@ -32,14 +32,14 @@ void Game::checkCollisions() {
   while (node) {
     Game::EntityNode *check_node = this->entities;
     if (node->entity->getX() > (unsigned int)COLS || node->entity->getY() > (unsigned int)LINES) {
-      node->entity->setDead();
+      node->entity->setNbLive(0);
       node = node->next;
       continue;
     }
     while (check_node) {
       if (check_node != node && check_node->entity->getX() == node->entity->getX() &&
           check_node->entity->getY() == node->entity->getY()) {
-        node->entity->setDead();
+        node->entity->setNbLive(node->entity->getNbLive() - 1);
         break;
       }
       check_node = check_node->next;
@@ -66,7 +66,7 @@ Game::EntityNode *Game::destroyEntityNode(EntityNode *node) {
 void Game::purgeEntities() {
   Game::EntityNode *node = this->entities;
   while (node) {
-    if (!node->entity->getAlive() && node->entity->getType() != "Player") {
+    if (!node->entity->getNbLive() && node->entity->getType() != "Player") {
       node = this->destroyEntityNode(node);
     } else {
       node = node->next;

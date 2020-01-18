@@ -6,7 +6,7 @@
 /*   By: bpajot <bpajot@student.le-101.fr>          +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/18 11:12:54 by bpajot       #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/18 15:17:00 by bpajot      ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/01/18 17:11:00 by bpajot      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -23,9 +23,11 @@ protected:
   Entity &operator=(Entity const &src);
   std::string _type;
   std::string _c;
-  bool _isAlive;
+  unsigned int _nbLive;
   float _x;
   float _y;
+  float _dx;
+  float _dy;
   unsigned int _color;
 
 public:
@@ -33,15 +35,15 @@ public:
 
   std::string getType(void) const;
   std::string getC(void) const;
-  bool getAlive(void) const;
+  unsigned int getNbLive(void) const;
   unsigned int getX(void) const;
   unsigned int getY(void) const;
-  void setDead(void);
-  void setColor(unsigned int x);
-  unsigned int getColor() const;
+  void setNbLive(unsigned int nbLive);
   void setX(unsigned int x);
   void setY(unsigned int y);
   virtual void updatePos(void) = 0;
+  void setColor(unsigned int x);
+  unsigned int getColor() const;
 };
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: bpajot <bpajot@student.le-101.fr>          +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/18 12:54:19 by bpajot       #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/18 15:23:36 by bpajot      ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/01/18 17:17:01 by bpajot      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -17,10 +17,15 @@ Missile::Missile(unsigned int x, unsigned int y, std::string ownerType) : Entity
 {
 	this->_type = "Missile";
 	this->_c = "-";
-	this->_isAlive = true;
+	this->_nbLive = 1;
 	this->_x = x;
 	this->_y= y;
 	this->_ownerType = ownerType;
+	if (this->_ownerType == "Player")
+		this->_dx = -1.0 / 5;
+	else
+		this->_dx = 1.0 / 3;
+	this->_dy = 0 ;
 }
 
 Missile::~Missile(void)
@@ -29,8 +34,6 @@ Missile::~Missile(void)
 
 void	Missile::updatePos(void)
 {
-	if (this->_ownerType == "Player")
-		this->_x += 1.0 / 5;
-	else
-		this->_x -= 1.0 / 3;
+	this->_x += this->_dx;
+	this->_y += this->_dy;
 }

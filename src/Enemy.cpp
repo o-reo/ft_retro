@@ -6,7 +6,7 @@
 /*   By: bpajot <bpajot@student.le-101.fr>          +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/18 11:55:21 by bpajot       #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/18 15:22:35 by bpajot      ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/01/18 17:13:05 by bpajot      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -17,9 +17,11 @@ Enemy::Enemy(unsigned int x, unsigned int y)
 {
 	this->_type = "Enemy";
 	this->_c =  "x";
-	this->_isAlive = true;
+	this->_nbLive = 1;
 	this->_x = x;
-	this->_y= y;
+	this->_y = y;
+	this->_dx = -1.0 / 20;
+	this->_dy = 0;
 }
 
 Enemy::~Enemy(void)
@@ -28,5 +30,6 @@ Enemy::~Enemy(void)
 
 void	Enemy::updatePos(void)
 {
-	this->_y = - 1.0 / 20;
+	this->_x += this->_dx;
+	this->_y += this->_dy;
 }
