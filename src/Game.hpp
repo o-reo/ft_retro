@@ -34,6 +34,7 @@ private:
   void checkCollisions();
   Entity *buildEntity(const std::string &type);
   void purgeEntities();
+  bool checkEmpty(int, int);
   void catchEvents();
 
   WINDOW *topbar;

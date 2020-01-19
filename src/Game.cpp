@@ -71,7 +71,8 @@ void Game::checkCollisions() {
     while (check_node) {
       if (check_node != node && check_node->entity->getX() == node->entity->getX() &&
           check_node->entity->getY() == node->entity->getY()) {
-        node->entity->setNbLive(std::max(node->entity->getNbLive(), 1u) - 1);
+        if (node->entity->getNbLive() != 0)
+          node->entity->setNbLive(node->entity->getNbLive() - 1);
         this->score++;
         if (node->entity->getType() == "Player" && node->entity->getNbLive() == 0)
           this->end = true;
@@ -81,6 +82,17 @@ void Game::checkCollisions() {
     }
     node = node->next;
   }
+}
+
+bool Game::checkEmpty(int x, int y) {
+  Game::EntityNode *node = this->entities;
+  while (node) {
+    if (node->entity->getX() == x && node->entity->getY() == y) {
+      return false;
+    }
+    node = node->next;
+  }
+  return true;
 }
 
 Game::EntityNode *Game::destroyEntityNode(EntityNode *node) {
@@ -117,8 +129,15 @@ Entity *Game::buildEntity(const std::string &type) {
     newNode->entity = new Missile(this->mainwin_width / 5, this->mainwin_height / 2, "Player");
     newNode->entity->setColor(COLOR_MISSILES);
   } else if (type == "Enemy") {
-    newNode->entity =
-        new Enemy(3 * this->mainwin_width / 4 + rand() % (this->mainwin_height / 4), rand() % (this->mainwin_height));
+    int x, y;
+    bool empty = false;
+    while (empty == false) {
+      srand(clock());
+      x = 1 + 3 * (this->mainwin_width - 2) / 4 + rand() % ((this->mainwin_width - 1) / 4);
+      y = 1 + rand() % (this->mainwin_height - 2);
+      empty = Game::checkEmpty(x, y);
+    }
+    newNode->entity = new Enemy(x, y);
     newNode->entity->setColor(COLOR_ALIEN);
   } else if (type == "Player") {
     newNode->entity = new Player(this->mainwin_width / 5, this->mainwin_height / 2);
