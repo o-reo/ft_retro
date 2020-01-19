@@ -9,6 +9,7 @@ Game::Game()
   timeout(0);
   curs_set(0);
   start_color();
+
   std::srand(std::clock());
 
   // Set cyan to be purpleish
@@ -53,6 +54,14 @@ void Game::initialize() {
     this->buildEntity("Enemy");
   }
   log->out() << "Initializing window" << std::endl;
+  if (LINES < (this->mainwin_height + 10) || COLS < (this->mainwin_width + 10)) {
+    this->end = true;
+    mvprintw(LINES / 2, COLS / 2 - 15, "Terminal window is too small");
+    refresh();
+    for (unsigned long i = 1999999999; i > 0; i--)
+      ;
+    return;
+  }
   this->end = false;
 }
 
@@ -77,7 +86,7 @@ void Game::checkCollisions() {
         node->entity->getX() < 0 || node->entity->getY() < 0) {
       node->entity->setNbLive(0);
       if (node->entity->getType() == "Enemy")
-        this->score = this->score <= 3 ? 0 : this->score - 3;
+        this->score = this->score <= 1 ? 0 : this->score - 1;
       node = node->next;
       continue;
     }
@@ -89,8 +98,9 @@ void Game::checkCollisions() {
             (!(node->entity->getType() == "Enemy" && check_node->entity->getType() == "Missile Enemy") &&
              !(node->entity->getType() == "Missile Enemy" && check_node->entity->getType() == "Enemy"))) {
           node->entity->setNbLive(node->entity->getNbLive() - 1);
-          this->score++;
         }
+        if (node->entity->getType() == "Missile Player" && check_node->entity->getType() == "Enemy")
+          this->score++;
         if (node->entity->getType() == "Player" && node->entity->getNbLive() == 0)
           this->end = true;
         break;
