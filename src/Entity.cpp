@@ -44,6 +44,15 @@ void Entity::setColor(unsigned int color) { this->_color = color; }
 
 void Entity::setNbLive(unsigned int nbLive) { this->_nbLive = nbLive; }
 
+void Entity::updateNbLive(const int delta) {
+  if (delta > 0 || (int)this->_nbLive >= -delta)
+    this->_nbLive += delta;
+  else
+    this->_nbLive = 0;
+}
+
 void Entity::setX(int x) { this->_x = x; }
 
 void Entity::setY(int y) { this->_y = y; }
+
+float Entity::getdX() const { return this->_dx; }

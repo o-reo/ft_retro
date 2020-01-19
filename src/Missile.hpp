@@ -12,22 +12,22 @@
 /* ************************************************************************** */
 
 #ifndef MISSILE_HPP
-# define MISSILE_HPP
+#define MISSILE_HPP
 
-# include "Entity.hpp"
-# include <iostream>
+#include "Entity.hpp"
+#include <iostream>
 
-class Missile : public Entity
-{
-	private:
-		std::string		_ownerType;
+class Missile : public Entity {
+private:
+  std::string _ownerType;
 
-	public:
-		Missile(unsigned int x, unsigned int y, std::string ownerType);
-		virtual ~Missile(void);
+public:
+  Missile(unsigned int x, unsigned int y, std::string ownerType);
+  virtual ~Missile(void);
 
-		virtual void	updatePos(void);
-		virtual std::string		getType(void) const;
+  virtual void updatePos(void);
+  virtual std::string getType(void) const;
+  virtual bool hasImmunity(const Entity *entity);
 };
 
 #endif

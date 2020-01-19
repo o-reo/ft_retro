@@ -20,7 +20,17 @@ public:
     Entity *entity;
     EntityNode *next;
   };
-  enum COLORS { COLOR_NONE, COLOR_MISSILES_PLAYER, COLOR_MISSILES_ENEMY, COLOR_PLAYER, COLOR_ALIEN, COLOR_SCORE, COLOR_ASTEROID, COLOR_BORDER };
+  enum COLORS {
+    COLOR_NONE,
+    COLOR_MISSILES_PLAYER,
+    COLOR_MISSILES_ENEMY,
+    COLOR_PLAYER,
+    COLOR_ALIEN,
+    COLOR_SCORE,
+    COLOR_ASTEROID,
+    COLOR_BORDER,
+    COLOR_BONUS
+  };
 
   Game();
   ~Game();
@@ -44,7 +54,6 @@ private:
 
   WINDOW *topbar;
   WINDOW *mainwin;
-  int score;
   const int topbar_size;
   const int mainwin_width;
   const int mainwin_height;

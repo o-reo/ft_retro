@@ -13,35 +13,41 @@
 
 #include "Missile.hpp"
 
-Missile::Missile(unsigned int x, unsigned int y, std::string ownerType) : Entity()
-{
-	this->_type = "Missile";
-	this->_c = "-";
-	this->_nbLive = 1;
-	this->_x = x;
-	this->_y= y;
-	this->_ownerType = ownerType;
-	if (this->_ownerType == "Player")
-		this->_dx = 1.0 / 5;
-	else
-		this->_dx = -1.0 / 3;
-	this->_dy = 0 ;
+Missile::Missile(unsigned int x, unsigned int y, std::string ownerType) : Entity() {
+  this->_type = "Missile";
+  this->_c = "-";
+  this->_nbLive = 1;
+  this->_x = x;
+  this->_y = y;
+  this->_ownerType = ownerType;
+  if (this->_ownerType == "Player")
+    this->_dx = 1.0 / 5;
+  else
+    this->_dx = -1.0 / 3;
+  this->_dy = 0;
 }
 
-Missile::~Missile(void)
-{
+Missile::~Missile(void) {}
+
+std::string Missile::getType(void) const {
+  if (this->_ownerType == "Player")
+    return ("Missile Player");
+  else
+    return ("Missile Enemy");
 }
 
-std::string	Missile::getType(void) const
-{
-	if (this->_ownerType == "Player")
-		return("Missile Player");
-	else
-		return("Missile Enemy");	
+void Missile::updatePos(void) {
+  this->_x += this->_dx;
+  this->_y += this->_dy;
 }
 
-void	Missile::updatePos(void)
-{
-	this->_x += this->_dx;
-	this->_y += this->_dy;
+bool Missile::hasImmunity(const Entity *entity) {
+	printw("%s immunity with %s\n", this->getType().c_str(), entity->getType().c_str());
+  if (entity->getType() == "Boss" && this->_dx < 0.0f)
+    return true;
+  if (entity->getType() == "Missile Enemy" || entity->getType() == "Missile Player")
+    return true;
+	if (entity->getType() == "Enemy" && this->_type == "Missile Enemy")
+		return true;
+  return false;
 }

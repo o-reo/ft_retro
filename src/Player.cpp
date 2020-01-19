@@ -13,7 +13,7 @@
 
 #include "Player.hpp"
 
-Player::Player(unsigned int x, unsigned int y) : Entity(), control(CONTROL_NONE) {
+Player::Player(unsigned int x, unsigned int y) : Entity(), control(CONTROL_NONE), score(0) {
   this->_type = "Player";
   this->_c = ">";
   this->_nbLive = 3;
@@ -43,4 +43,21 @@ void Player::updatePos(void) {
     break;
   }
   this->control = CONTROL_NONE;
+}
+
+int Player::getScore() const { return this->score; }
+
+void Player::updateScore(const int delta) {
+  if (delta > 0 || this->score >= -delta)
+    this->score += delta;
+  else
+    this->score = 0;
+}
+
+bool Player::hasImmunity(const Entity *entity) {
+  if (entity->getType() == "Missile Player")
+    return true;
+  if (entity->getType() == "Bonus")
+    return true;
+  return false;
 }
