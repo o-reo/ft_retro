@@ -6,7 +6,7 @@
 /*   By: bpajot <bpajot@student.le-101.fr>          +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/18 11:12:54 by bpajot       #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/18 18:59:02 by bpajot      ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/01/19 13:30:26 by bpajot      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -33,7 +33,7 @@ protected:
 public:
   virtual ~Entity(void);
   
-  std::string		getType(void) const;
+  virtual std::string		getType(void) const;
   std::string		getC(void) const;
   unsigned int	getNbLive(void) const;
   int				getX(void) const;

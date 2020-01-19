@@ -75,12 +75,12 @@ void Game::checkCollisions() {
     while (check_node) {
       if (check_node != node && check_node->entity->getX() == node->entity->getX() &&
           check_node->entity->getY() == node->entity->getY()) {
-        if (node->entity->getNbLive() != 0
-          && (node->entity->getType() != "Missile Enemy"
-          && check_node->entity->getType() != "Missile Enemy"))
-        {
+        if (node->entity->getNbLive() != 0 
+          && (!(node->entity->getType() == "Enemy"
+          && check_node->entity->getType() == "Missile Enemy")
+          && !(node->entity->getType() == "Missile Enemy"
+          && check_node->entity->getType() == "Enemy")))
           node->entity->setNbLive(node->entity->getNbLive() - 1);
-        }
         if (check_node->entity->getType() == "Enemy" || node->entity->getType() == "Enemy")
           this->score++;
         if (node->entity->getType() == "Player" && node->entity->getNbLive() == 0)
