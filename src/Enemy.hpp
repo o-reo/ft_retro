@@ -12,18 +12,19 @@
 /* ************************************************************************** */
 
 #ifndef ENEMY_HPP
-# define ENEMY_HPP
+#define ENEMY_HPP
 
-# include "Entity.hpp"
-# include <iostream>
+#include "Entity.hpp"
+#include "Logger.hpp"
+#include <iostream>
 
-class Enemy : public Entity
-{
-	public:
-		Enemy(unsigned int x, unsigned int y);
-		virtual ~Enemy(void);
+class Enemy : public Entity {
+public:
+  Enemy(unsigned int x, unsigned int y);
+  virtual ~Enemy(void);
 
-		virtual void	updatePos(void);
+  virtual void updatePos(void);
+  virtual bool hasImmunity(const Entity *entity);
 };
 
 #endif

@@ -29,6 +29,7 @@ class Boss : public Entity
 		virtual void	updatePos(void);
 
 		static unsigned int liveGlobalBoss;
+		virtual bool hasImmunity(const Entity *entity);
 };
 
 #endif

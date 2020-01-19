@@ -14,8 +14,8 @@
 #ifndef ENTITY_HPP
 #define ENTITY_HPP
 
-#include <iostream>
 #include "ncurses.h"
+#include <iostream>
 
 class Entity {
 protected:
@@ -33,18 +33,21 @@ protected:
 
 public:
   virtual ~Entity(void);
-  
-  virtual std::string		getType(void) const;
-  std::string		getC(void) const;
-  unsigned int	getNbLive(void) const;
-  int				getX(void) const;
-  int				getY(void) const;
-  unsigned int 	getColor(void) const;
-  void			setNbLive(unsigned int nbLive);
-  void			setX(int x);
-  void			setY(int y);
-  void 			setColor(unsigned int color);
-  virtual void	updatePos(void) = 0;
+
+  virtual std::string getType(void) const;
+  std::string getC(void) const;
+  unsigned int getNbLive(void) const;
+  int getX(void) const;
+  int getY(void) const;
+  float getdX(void) const;
+  unsigned int getColor(void) const;
+  void setNbLive(unsigned int nbLive);
+  void updateNbLive(const int delta);
+  void setX(int x);
+  void setY(int y);
+  void setColor(unsigned int color);
+  virtual void updatePos(void) = 0;
+  virtual bool hasImmunity(const Entity *entity) = 0;
 };
 
 #endif

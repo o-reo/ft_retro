@@ -24,9 +24,13 @@ public:
   virtual ~Player(void);
   virtual void updatePos(void);
   void setControl(Player::CONTROL);
+  int getScore() const;
+  void updateScore(const int delta);
+  virtual bool hasImmunity(const Entity *entity);
 
 private:
   CONTROL control;
+  int score;
 };
 
 #endif

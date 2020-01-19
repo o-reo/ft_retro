@@ -9,6 +9,7 @@ public:
   virtual ~Asteroid(void);
 
   virtual void updatePos(void);
+  virtual bool hasImmunity(const Entity* entity);
 };
 
 #endif

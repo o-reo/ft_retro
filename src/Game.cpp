@@ -1,7 +1,6 @@
 #include "Game.hpp"
 
-Game::Game()
-    : score(0), topbar_size(2), mainwin_width(120), mainwin_height(20), entities(nullptr), player(nullptr), end(false) {
+Game::Game() : topbar_size(2), mainwin_width(120), mainwin_height(20), entities(nullptr), player(nullptr),boss_active(false), end(false) {
   initscr();
   noecho();
   cbreak();
@@ -22,6 +21,7 @@ Game::Game()
   init_pair(Game::COLOR_ALIEN, COLOR_CYAN, COLOR_BLACK);
   init_pair(Game::COLOR_BORDER, COLOR_BLUE, COLOR_BLACK);
   init_pair(Game::COLOR_ASTEROID, COLOR_BLUE, COLOR_BLACK);
+  init_pair(Game::COLOR_BONUS, COLOR_GREEN, COLOR_BLACK);
 
   this->topbar = subwin(stdscr, this->topbar_size, this->mainwin_width, 0, 0);
 
@@ -47,7 +47,6 @@ void Game::initialize() {
   this->start_time = std::clock();
   this->entities = nullptr;
   this->player = (Player *)this->buildEntity("Player");
-  this->score = 0;
   int i = -1;
   while (++i < 10) {
     log->out() << "Creation enemy " << i << std::endl;
@@ -80,14 +79,17 @@ Game::~Game() {
 }
 
 void Game::checkCollisions() {
-  //Logger *log = Logger::get();
+  // Logger *log = Logger::get();
+  bool has_boss = false;
   Game::EntityNode *node = this->entities;
   while (node) {
+    if (node->entity->getType() == "Boss")
+      has_boss = true;
     if (node->entity->getX() > this->mainwin_width || node->entity->getY() > this->mainwin_height ||
         node->entity->getX() < 0 || node->entity->getY() < 0) {
       node->entity->setNbLive(0);
       if (node->entity->getType() == "Enemy")
-        this->score = this->score <= 1 ? 0 : this->score - 1;
+        this->player->updateScore(-1);
       node = node->next;
       continue;
     }
@@ -95,20 +97,15 @@ void Game::checkCollisions() {
     while (check_node) {
       if (check_node != node && check_node->entity->getX() == node->entity->getX() &&
           check_node->entity->getY() == node->entity->getY()) {
-        if (node->entity->getNbLive() != 0 
-          && (!(node->entity->getType() == "Enemy"
-          && check_node->entity->getType() == "Missile Enemy")
-          && !(node->entity->getType() == "Missile Enemy"
-          && check_node->entity->getType() == "Enemy")))
-        {
+        if (!node->entity->hasImmunity(check_node->entity)) {
+          node->entity->updateNbLive(-1);
           if (node->entity->getNbLive() > 0)
             node->entity->setNbLive(node->entity->getNbLive() - 1);
-          this->score++;
+          this->player->updateScore(1);
           if (node->entity->getType() == "Boss" && node->entity->getNbLive() == 0) {
             Game::EntityNode *check_boss = this->entities;
             while (check_boss) {
-              if (check_boss != node && check_boss->entity->getType() == "Boss")
-              {
+              if (check_boss != node && check_boss->entity->getType() == "Boss") {
                 if (check_boss->entity->getNbLive() > 0)
                   check_boss->entity->setNbLive(check_boss->entity->getNbLive() - 1);
               }
@@ -116,16 +113,17 @@ void Game::checkCollisions() {
             }
           }
         }
+        if (node->entity->getType() == "Player" && check_node->entity->getType() == "Bonus")
+          ((Bonus *)(check_node->entity))->applyBonus(node->entity);
         if (node->entity->getType() == "Missile Player" && check_node->entity->getType() == "Enemy")
-          this->score++;
-        if (node->entity->getType() == "Player" && node->entity->getNbLive() == 0)
-          this->end = true;
+          this->player->updateScore(1);
         break;
-        } 
+      }
       check_node = check_node->next;
     }
     node = node->next;
   }
+  this->boss_active = has_boss;
 }
 
 bool Game::checkEmpty(const int x, const int y) {
@@ -170,8 +168,15 @@ Entity *Game::buildEntity(const std::string &type) {
   Game::EntityNode *newNode = new Game::EntityNode;
   newNode->next = nullptr;
   if (type == "Bonus") {
-    newNode->entity = new Bonus(this->mainwin_width / 5, this->mainwin_height / 2);
-    newNode->entity->setColor(COLOR_BORDER);
+    // Random Bonus position
+    int y;
+    bool empty = false;
+    while (empty == false) {
+      y = this->generateRandom(0, this->mainwin_height);
+      empty = Game::checkEmpty(0, y);
+    }
+    newNode->entity = new Bonus(this->mainwin_width, y);
+    newNode->entity->setColor(COLOR_BONUS);
   } else if (type == "Missile Player") {
     newNode->entity = new Missile(this->mainwin_width / 5, this->mainwin_height / 2, "Player");
     newNode->entity->setColor(COLOR_MISSILES_PLAYER);
@@ -220,37 +225,33 @@ int Game::generateRandom(const int low, const int up) { return (low + std::rand(
 
 void Game::generateEvents() {
   // Generate Bonus
-  // if (((this->score % 20) == 19) &&) {
-  //   this->buildEntity("Bonus");
-  // }
-  // Generate Enemies
-  if (this->generateRandom(0, 200) == 0) {
+  if (this->generateRandom(0, 500) == 0) {
+    this->buildEntity("Bonus");
+  }
+  // Generate Asteroids
+  if (this->generateRandom(0, 400) == 0) {
     this->buildEntity("Asteroid");
   }
-  int ratio = 1000 / (this->score + 1) + 10;
+  // Generate Enemies
+  int ratio = 1000 / (this->player->getScore() + 1) + 10;
   if (this->generateRandom(0, ratio) == 0) {
     Enemy *en = (Enemy *)this->buildEntity("Enemy");
     Missile *miss = (Missile *)this->buildEntity("Missile Enemy");
     miss->setX(en->getX() - 1);
     miss->setY(en->getY());
   }
-  if ((this->score % 500) >= 250 && (this->score % 500) <= 251) {
-    for(int i = 0; i <= 12; i++)
-    {
+  if (!this->boss_active && (this->player->getScore() % 1000) > 500) {
+    this->boss_active = true;
+    for (int i = 0; i <= 12; i++) {
       int begin;
       int end;
-      if (i < 4)
-      {
+      if (i < 4) {
         begin = -2;
         end = +2;
-      }
-      else if (i < 8)
-      {
+      } else if (i < 8) {
         begin = -6;
         end = +6;
-      }
-      else
-      {
+      } else {
         begin = -10;
         end = +10;
       }
@@ -319,7 +320,7 @@ void Game::displayScore() {
   wattron(this->topbar, A_BOLD);
   wattron(this->topbar, COLOR_PAIR(COLOR_SCORE));
   mvwprintw(this->topbar, 1, 1, "Time: %4i  Score: %4i  Lives: %4u", (std::clock() - this->start_time) / CLOCKS_PER_SEC,
-            this->score, this->player->getNbLive());
+            this->player->getScore(), this->player->getNbLive());
   wattroff(this->topbar, COLOR_PAIR(COLOR_SCORE));
   wattroff(this->topbar, A_BOLD);
   wrefresh(this->topbar);
@@ -354,6 +355,8 @@ void Game::loop() {
     this->displayScore();
     this->update();
     wrefresh(this->mainwin);
+    if (this->player->getNbLive() <= 0)
+      break;
     tac = std::clock();
     while (tac - tic < CLOCKS_PER_SEC / 100)
       tac = std::clock();

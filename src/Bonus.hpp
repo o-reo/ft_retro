@@ -12,19 +12,25 @@
 /* ************************************************************************** */
 
 #ifndef BONUS_HPP
-# define BONUS_HPP
+#define BONUS_HPP
 
-# include "Entity.hpp"
+#include "Entity.hpp"
+#include "Player.hpp"
 #include <ctime>
-# include <iostream>
+#include <iostream>
 
-class Bonus : public Entity
-{
-	public:
-		Bonus(unsigned int x, unsigned int y);
-		virtual ~Bonus(void);
+class Bonus : public Entity {
+public:
+  enum Effect { EFFECT_HEALTH, EFFECT_SCORE, EFFECT_SIZE };
+  Bonus(unsigned int x, unsigned int y);
+  virtual ~Bonus(void);
+  void applyBonus(Entity *entity);
 
-		virtual void	updatePos(void);
+  virtual void updatePos(void);
+  virtual bool hasImmunity(const Entity* entity);
+
+private:
+  Effect effect;
 };
 
 #endif
