@@ -240,7 +240,7 @@ void Game::generateEvents() {
     miss->setX(en->getX() - 1);
     miss->setY(en->getY());
   }
-  if (!this->boss_active && (this->player->getScore() % 1000) > 500) {
+  if (!this->boss_active && (this->player->getScore() % 510) > 500) {
     this->boss_active = true;
     for (int i = 0; i <= 12; i++) {
       int begin;
