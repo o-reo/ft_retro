@@ -49,7 +49,8 @@ void Game::checkCollisions() {
     while (check_node) {
       if (check_node != node && check_node->entity->getX() == node->entity->getX() &&
           check_node->entity->getY() == node->entity->getY()) {
-        node->entity->setNbLive(std::max(node->entity->getNbLive(), 1u) - 1);
+        if (node->entity->getNbLive() != 0)
+          node->entity->setNbLive(node->entity->getNbLive() - 1);
         this->score++;
         if (node->entity->getType() == "Player" && node->entity->getNbLive() == 0)
           this->end = true;
