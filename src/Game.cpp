@@ -70,6 +70,7 @@ Game::~Game() {
 }
 
 void Game::checkCollisions() {
+  //Logger *log = Logger::get();
   Game::EntityNode *node = this->entities;
   while (node) {
     if (node->entity->getX() > this->mainwin_width || node->entity->getY() > this->mainwin_height ||
@@ -90,13 +91,25 @@ void Game::checkCollisions() {
           && !(node->entity->getType() == "Missile Enemy"
           && check_node->entity->getType() == "Enemy")))
         {
-          node->entity->setNbLive(node->entity->getNbLive() - 1);
+          if (node->entity->getNbLive() > 0)
+            node->entity->setNbLive(node->entity->getNbLive() - 1);
           this->score++;
+          if (node->entity->getType() == "Boss" && node->entity->getNbLive() == 0) {
+            Game::EntityNode *check_boss = this->entities;
+            while (check_boss) {
+              if (check_boss != node && check_boss->entity->getType() == "Boss")
+              {
+                if (check_boss->entity->getNbLive() > 0)
+                  check_boss->entity->setNbLive(check_boss->entity->getNbLive() - 1);
+              }
+              check_boss = check_boss->next;
+            }
+          }
         }
         if (node->entity->getType() == "Player" && node->entity->getNbLive() == 0)
           this->end = true;
         break;
-      }
+        } 
       check_node = check_node->next;
     }
     node = node->next;
@@ -168,7 +181,7 @@ Entity *Game::buildEntity(const std::string &type) {
     newNode->entity = new Player(this->mainwin_width / 5, this->mainwin_height / 2);
     newNode->entity->setColor(COLOR_PLAYER);
   } else if (type == "Boss") {
-    newNode->entity = new Player(4 * this->mainwin_width / 5, this->mainwin_height / 2);
+    newNode->entity = new Boss(4 * this->mainwin_width / 5, this->mainwin_height / 2);
     newNode->entity->setColor(COLOR_ALIEN);
   }
   if (!node) {
@@ -184,7 +197,6 @@ Entity *Game::buildEntity(const std::string &type) {
 int Game::generateRandom(const int low, const int up) { return (low + std::rand() % (1 + up)); }
 
 void Game::generateEvents() {
-  Logger *log = Logger::get();
   // Generate Bonus
   // if (((this->score % 20) == 19) &&) {
   //   this->buildEntity("Bonus");
@@ -197,19 +209,34 @@ void Game::generateEvents() {
     miss->setX(en->getX() - 1);
     miss->setY(en->getY());
   }
-  if (this->score >= 150 && this->score <= 151)
+  if (this->score >= 50 && this->score <= 51)
   {
-    for(int i = -4; i <= 4; i++)
+    for(int i = 0; i <= 12; i++)
     {
-      for(int j = -4; j <= 4; j++)
+      int begin;
+      int end;
+      if (i < 4)
       {
-        log->out() << i << " " << j << std::endl;
+        begin = -2;
+        end = +2;
+      }
+      else if (i < 8)
+      {
+        begin = -6;
+        end = +6;
+      }
+      else
+      {
+        begin = -10;
+        end = +10;
+      }
+      for(int j = begin; j <= end; j++)
+      {
         Boss *bs = (Boss *)this->buildEntity("Boss");
-        bs->setX(4 * COLS / 5 + i);     
-        bs->setY(LINES/ 2 + j);     
+        bs->setX(4 * this->mainwin_width / 5 + i);     
+        bs->setY(this->mainwin_height / 2 + j);     
       }
     }
-
   }
 }
 
