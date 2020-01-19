@@ -46,7 +46,7 @@ bool Missile::hasImmunity(const Entity *entity) {
     return true;
   if (entity->getType() == "Missile Enemy" || entity->getType() == "Missile Player")
     return true;
-	if (entity->getType() == "Enemy" && this->_type == "Missile Enemy")
+	if (entity->getType() == "Enemy" && this->_ownerType == "Enemy")
 		return true;
   return false;
 }

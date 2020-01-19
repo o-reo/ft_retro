@@ -15,6 +15,7 @@
 #define ENEMY_HPP
 
 #include "Entity.hpp"
+#include "Logger.hpp"
 #include <iostream>
 
 class Enemy : public Entity {

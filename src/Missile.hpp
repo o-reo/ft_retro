@@ -15,6 +15,7 @@
 #define MISSILE_HPP
 
 #include "Entity.hpp"
+#include "Logger.hpp"
 #include <iostream>
 
 class Missile : public Entity {
