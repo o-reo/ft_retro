@@ -6,7 +6,7 @@
 /*   By: bpajot <bpajot@student.le-101.fr>          +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/18 12:52:40 by bpajot       #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/18 15:21:15 by bpajot      ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/01/19 13:06:27 by bpajot      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -27,6 +27,7 @@ class Missile : public Entity
 		virtual ~Missile(void);
 
 		virtual void	updatePos(void);
+		std::string		getType(void) const;
 };
 
 #endif
