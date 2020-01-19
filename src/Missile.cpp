@@ -6,7 +6,7 @@
 /*   By: bpajot <bpajot@student.le-101.fr>          +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/18 12:54:19 by bpajot       #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/18 17:22:20 by bpajot      ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/01/19 13:02:35 by bpajot      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -30,6 +30,14 @@ Missile::Missile(unsigned int x, unsigned int y, std::string ownerType) : Entity
 
 Missile::~Missile(void)
 {
+}
+
+std::string	Missile::getType(void) const
+{
+	if (this->_ownerType == "Player")
+		return("Missile Player");
+	else
+		return("Missile Enemy");	
 }
 
 void	Missile::updatePos(void)

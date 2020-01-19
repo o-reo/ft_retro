@@ -83,7 +83,9 @@ void Game::checkCollisions() {
     while (check_node) {
       if (check_node != node && check_node->entity->getX() == node->entity->getX() &&
           check_node->entity->getY() == node->entity->getY()) {
-        if (node->entity->getNbLive() != 0)
+        if (node->entity->getNbLive() != 0 &&
+            (!(node->entity->getType() == "Enemy" && check_node->entity->getType() == "Missile Enemy") &&
+             !(node->entity->getType() == "Missile Enemy" && check_node->entity->getType() == "Enemy")))
           node->entity->setNbLive(node->entity->getNbLive() - 1);
         if (check_node->entity->getType() == "Enemy" || node->entity->getType() == "Enemy")
           this->score++;
@@ -135,15 +137,17 @@ void Game::purgeEntities() {
 }
 
 Entity *Game::buildEntity(const std::string &type) {
-  Logger *log = Logger::get();
   Game::EntityNode *node = this->entities;
   Game::EntityNode *newNode = new Game::EntityNode;
   newNode->next = nullptr;
   if (type == "Bonus") {
     newNode->entity = new Bonus(this->mainwin_width / 5, this->mainwin_height / 2);
     newNode->entity->setColor(COLOR_MISSILES);
-  } else if (type == "Missile") {
+  } else if (type == "Missile Player") {
     newNode->entity = new Missile(this->mainwin_width / 5, this->mainwin_height / 2, "Player");
+    newNode->entity->setColor(COLOR_MISSILES);
+  } else if (type == "Missile Enemy") {
+    newNode->entity = new Missile(this->mainwin_width / 5, this->mainwin_height / 2, "Enemy");
     newNode->entity->setColor(COLOR_MISSILES);
   } else if (type == "Enemy") {
     // Random enemy position
@@ -180,7 +184,10 @@ void Game::generateEvents() {
   // Generate Enemies
   int ratio = 1000 / (this->score + 1) + 10;
   if (std::rand() % ratio == 0) {
-    this->buildEntity("Enemy");
+    Enemy *en = (Enemy *)this->buildEntity("Enemy");
+    Missile *miss = (Missile *)this->buildEntity("Missile Enemy");
+    miss->setX(en->getX() - 1);
+    miss->setY(en->getY());
   }
 }
 
@@ -219,7 +226,7 @@ void Game::catchEvents() {
       this->player->setControl(Player::CONTROL_DOWN);
     break;
   case 32:
-    miss = this->buildEntity("Missile");
+    miss = this->buildEntity("Missile Player");
     miss->setX(this->player->getX() + 1);
     miss->setY(this->player->getY());
     break;
