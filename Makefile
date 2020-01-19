@@ -9,7 +9,8 @@ RAW_SRC = main \
 					Player \
 					Enemy \
 					Missile \
-					Bonus
+					Bonus \
+					Asteroid
 SRC = $(addprefix src/, $(addsuffix .cpp, $(RAW_SRC)))
 OBJ = $(addprefix build/, $(addsuffix .o, $(RAW_SRC)))
 LDLIBS = -lncurses

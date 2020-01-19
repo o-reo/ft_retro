@@ -1,12 +1,13 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#include "Asteroid.hpp"
+#include "Bonus.hpp"
 #include "Enemy.hpp"
 #include "Entity.hpp"
 #include "Logger.hpp"
 #include "Missile.hpp"
 #include "Player.hpp"
-#include "Bonus.hpp"
 #include <cmath>
 #include <ctime>
 #include <ncurses.h>
@@ -19,7 +20,7 @@ public:
     Entity *entity;
     EntityNode *next;
   };
-  enum COLORS { COLOR_NONE, COLOR_MISSILES, COLOR_PLAYER, COLOR_ALIEN, COLOR_SCORE, COLOR_BORDER };
+  enum COLORS { COLOR_NONE, COLOR_MISSILES, COLOR_PLAYER, COLOR_ALIEN, COLOR_SCORE, COLOR_BORDER, COLOR_ASTEROID };
 
   Game();
   ~Game();
