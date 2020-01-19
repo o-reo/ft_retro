@@ -12,7 +12,8 @@ Game::Game()
   // Set cyan to be purpleish
   init_color(COLOR_CYAN, 600, 20, 500);
   init_color(COLOR_BLUE, 400, 400, 400);
-  init_pair(Game::COLOR_MISSILES, COLOR_RED, COLOR_BLACK);
+  init_pair(Game::COLOR_MISSILES_PLAYER, COLOR_RED, COLOR_BLACK);
+  init_pair(Game::COLOR_MISSILES_ENEMY, COLOR_MAGENTA, COLOR_BLACK);
   init_pair(Game::COLOR_PLAYER, COLOR_YELLOW, COLOR_BLACK);
   init_pair(Game::COLOR_SCORE, COLOR_GREEN, COLOR_BLACK);
   init_pair(Game::COLOR_ALIEN, COLOR_CYAN, COLOR_BLACK);
@@ -77,9 +78,10 @@ void Game::checkCollisions() {
           && check_node->entity->getType() == "Missile Enemy")
           && !(node->entity->getType() == "Missile Enemy"
           && check_node->entity->getType() == "Enemy")))
+        {
           node->entity->setNbLive(node->entity->getNbLive() - 1);
-        if (check_node->entity->getType() == "Enemy" || node->entity->getType() == "Enemy")
           this->score++;
+        }
         if (node->entity->getType() == "Player" && node->entity->getNbLive() == 0)
           this->end = true;
         break;
@@ -133,10 +135,10 @@ Entity *Game::buildEntity(const std::string &type) {
   newNode->next = nullptr;
   if (type == "Missile Player") {
     newNode->entity = new Missile(this->mainwin_width / 5, this->mainwin_height / 2, "Player");
-    newNode->entity->setColor(COLOR_MISSILES);
+    newNode->entity->setColor(COLOR_MISSILES_PLAYER);
   } else if (type == "Missile Enemy") {
     newNode->entity = new Missile(this->mainwin_width / 5, this->mainwin_height / 2, "Enemy");
-    newNode->entity->setColor(COLOR_MISSILES);
+    newNode->entity->setColor(COLOR_MISSILES_ENEMY);
   } else if (type == "Enemy") {
     int x, y;
     bool empty = false;
