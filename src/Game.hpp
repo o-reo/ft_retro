@@ -9,6 +9,7 @@
 #include <ncurses.h>
 #include <string>
 #include <time.h>
+#include <cmath>
 
 class Game {
 

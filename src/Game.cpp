@@ -17,9 +17,12 @@ Game::Game() : entities(nullptr), end(false), score(0), scorebar(3) {
 
   this->player = (Player *)this->buildEntity("Player");
   int i = -1;
-  while (++i < 100)
-    this->buildEntity("Enemy");
   Logger *log = Logger::get();
+  while (++i < 10) 
+  {
+    log->out() << "Creation enemy " << i << std::endl;
+    this->buildEntity("Enemy");
+  }
   log->out() << "Initializing window" << std::endl;
 }
 
@@ -51,7 +54,8 @@ void Game::checkCollisions() {
           check_node->entity->getY() == node->entity->getY()) {
         if (node->entity->getNbLive() != 0)
           node->entity->setNbLive(node->entity->getNbLive() - 1);
-        this->score++;
+        if (check_node->entity->getType() == "Enemy" || node->entity->getType() == "Enemy")
+          this->score++;
         if (node->entity->getType() == "Player" && node->entity->getNbLive() == 0)
           this->end = true;
         break;
@@ -198,5 +202,9 @@ void Game::loop() {
     tic = tac = clock();
     while (tac - tic < CLOCKS_PER_SEC / 100)
       tac = clock();
+      srand(clock());
+      int ratio = 1000 / (this->score + 1) + 10;
+      if (rand() % ratio == 0)
+        this->buildEntity("Enemy");
   }
 }
