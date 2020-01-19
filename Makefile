@@ -8,7 +8,8 @@ RAW_SRC = main \
 					Entity \
 					Player \
 					Enemy \
-					Missile
+					Missile \
+					Bonus
 SRC = $(addprefix src/, $(addsuffix .cpp, $(RAW_SRC)))
 OBJ = $(addprefix build/, $(addsuffix .o, $(RAW_SRC)))
 LDLIBS = -lncurses
