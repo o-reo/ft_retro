@@ -14,7 +14,8 @@ Game::Game()
   // Set cyan to be purpleish
   init_color(COLOR_CYAN, 600, 20, 500);
   init_color(COLOR_BLUE, 400, 400, 400);
-  init_pair(Game::COLOR_MISSILES, COLOR_RED, COLOR_BLACK);
+  init_pair(Game::COLOR_MISSILES_PLAYER, COLOR_RED, COLOR_BLACK);
+  init_pair(Game::COLOR_MISSILES_ENEMY, COLOR_MAGENTA, COLOR_BLACK);
   init_pair(Game::COLOR_PLAYER, COLOR_YELLOW, COLOR_BLACK);
   init_pair(Game::COLOR_SCORE, COLOR_GREEN, COLOR_BLACK);
   init_pair(Game::COLOR_ALIEN, COLOR_CYAN, COLOR_BLACK);
@@ -87,18 +88,17 @@ void Game::checkCollisions() {
         if (node->entity->getNbLive() != 0 &&
             (!(node->entity->getType() == "Enemy" && check_node->entity->getType() == "Missile Enemy") &&
              !(node->entity->getType() == "Missile Enemy" && check_node->entity->getType() == "Enemy"))) {
+          node->entity->setNbLive(node->entity->getNbLive() - 1);
+          this->score++;
         }
-        node->entity->setNbLive(node->entity->getNbLive() - 1);
-        this->score++;
+        if (node->entity->getType() == "Player" && node->entity->getNbLive() == 0)
+          this->end = true;
+        break;
       }
-      if (node->entity->getType() == "Player" && node->entity->getNbLive() == 0)
-        this->end = true;
-      break;
+      check_node = check_node->next;
     }
-    check_node = check_node->next;
+    node = node->next;
   }
-  node = node->next;
-}
 }
 
 bool Game::checkEmpty(const int x, const int y) {
@@ -144,13 +144,13 @@ Entity *Game::buildEntity(const std::string &type) {
   newNode->next = nullptr;
   if (type == "Bonus") {
     newNode->entity = new Bonus(this->mainwin_width / 5, this->mainwin_height / 2);
-    newNode->entity->setColor(COLOR_MISSILES);
+    newNode->entity->setColor(COLOR_BORDER);
   } else if (type == "Missile Player") {
     newNode->entity = new Missile(this->mainwin_width / 5, this->mainwin_height / 2, "Player");
-    newNode->entity->setColor(COLOR_MISSILES);
+    newNode->entity->setColor(COLOR_MISSILES_PLAYER);
   } else if (type == "Missile Enemy") {
     newNode->entity = new Missile(this->mainwin_width / 5, this->mainwin_height / 2, "Enemy");
-    newNode->entity->setColor(COLOR_MISSILES);
+    newNode->entity->setColor(COLOR_MISSILES_ENEMY);
   } else if (type == "Asteroid") {
     // Random Asteroid position
     int y;
