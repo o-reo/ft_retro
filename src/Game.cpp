@@ -1,6 +1,8 @@
 #include "Game.hpp"
 
-Game::Game() : topbar_size(2), mainwin_width(120), mainwin_height(20), entities(nullptr), player(nullptr),boss_active(false), end(false) {
+Game::Game()
+    : topbar_size(2), mainwin_width(120), mainwin_height(20), entities(nullptr), player(nullptr), boss_active(false),
+      end(false) {
   initscr();
   noecho();
   cbreak();
@@ -101,8 +103,6 @@ void Game::checkCollisions() {
           node->entity->updateNbLive(-1);
           if (node->entity->getNbLive() > 0)
             node->entity->setNbLive(node->entity->getNbLive() - 1);
-          this->player->updateScore(1);
-          
         }
         if (node->entity->getType() == "Player" && check_node->entity->getType() == "Bonus")
           ((Bonus *)(check_node->entity))->applyBonus(node->entity);
@@ -113,15 +113,13 @@ void Game::checkCollisions() {
       check_node = check_node->next;
     }
     if (node->entity->getType() == "Boss" && node->entity->getNbLive() == 0) {
-            Game::EntityNode *check_boss = this->entities;
-            while (check_boss) {
-              if (check_boss != node && check_boss->entity->getType() == "Boss") {
-                if (check_boss->entity->getNbLive() > 0)
-                  check_boss->entity->setNbLive(check_boss->entity->getNbLive() - 1);
-              }
-              check_boss = check_boss->next;
-            }
-          }
+      Game::EntityNode *check_boss = this->entities;
+      while (check_boss) {
+        if (check_boss != node && check_boss->entity->getType() == "Boss")
+          check_boss->entity->updateNbLive(- 1 * this->generateRandom(0, 1));
+        check_boss = check_boss->next;
+      }
+    }
     node = node->next;
   }
   this->boss_active = has_boss;
@@ -176,7 +174,7 @@ Entity *Game::buildEntity(const std::string &type) {
       y = this->generateRandom(0, this->mainwin_height);
       empty = Game::checkEmpty(0, y);
     }
-    newNode->entity = new Bonus(this->mainwin_width, y);
+    newNode->entity = new Bonus(this->mainwin_width / 2, y);
     newNode->entity->setColor(COLOR_BONUS);
   } else if (type == "Missile Player") {
     newNode->entity = new Missile(this->mainwin_width, this->mainwin_height / 2, "Player");
@@ -226,22 +224,23 @@ int Game::generateRandom(const int low, const int up) { return (low + std::rand(
 
 void Game::generateEvents() {
   // Generate Bonus
-  if (this->generateRandom(0, 500) == 0) {
+  if (this->generateRandom(0, 300) == 0) {
     this->buildEntity("Bonus");
   }
   // Generate Asteroids
-  if (this->generateRandom(0, 400) == 0) {
+  if (this->generateRandom(0, 300) == 0) {
     this->buildEntity("Asteroid");
   }
   // Generate Enemies
-  int ratio = 1000 / (this->player->getScore() + 1) + 10;
+  int ratio = 2000 / (this->player->getScore() + 1) + 10;
   if (this->generateRandom(0, ratio) == 0) {
     Enemy *en = (Enemy *)this->buildEntity("Enemy");
     Missile *miss = (Missile *)this->buildEntity("Missile Enemy");
     miss->setX(en->getX() - 1);
     miss->setY(en->getY());
   }
-  if (!this->boss_active && (this->player->getScore() % 510) > 500) {
+  std::clock_t current_time = (std::clock() - this->start_time) / CLOCKS_PER_SEC;
+  if (!this->boss_active && current_time != 0 && current_time % 20 == 0) {
     this->boss_active = true;
     for (int i = 0; i <= 12; i++) {
       int begin;
@@ -256,17 +255,15 @@ void Game::generateEvents() {
         begin = -10;
         end = +10;
       }
-      for(int j = begin; j <= end; j++)
-      {
+      for (int j = begin; j <= end; j++) {
         Boss *bs = (Boss *)this->buildEntity("Boss");
-        bs->setX(4 * this->mainwin_width / 5 + i);     
-        bs->setY(this->mainwin_height / 2 + j);     
-        /*if (i == 0 || i == 4 || i == 8)
-        {
+        bs->setX(4 * this->mainwin_width / 5 + i);
+        bs->setY(this->mainwin_height / 2 + j);
+        if (i == 0 || i == 4 || i == 8) {
           Missile *miss = (Missile *)this->buildEntity("Missile Enemy");
           miss->setX(bs->getX() - 1);
           miss->setY(bs->getY());
-        }*/
+        }
       }
     }
   }

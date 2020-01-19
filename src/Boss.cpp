@@ -17,7 +17,7 @@
 Boss::Boss(unsigned int x, unsigned int y) : Entity() {
   this->_type = "Boss";
   this->_c = "#";
-  this->_nbLive = 15;
+  this->_nbLive = 25;
   this->_x = x;
   this->_y = y;
   this->_base_y = y;

@@ -38,7 +38,7 @@ void Bonus::applyBonus(Entity *entity) {
     break;
   case EFFECT_SCORE:
     if (entity->getType() == "Player")
-      ((Player *)entity)->updateScore(20);
+      ((Player *)entity)->updateScore(100);
   default:
     break;
   }
