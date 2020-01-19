@@ -62,6 +62,17 @@ void Game::checkCollisions() {
   }
 }
 
+bool Game::checkEmpty(int x, int y) {
+  Game::EntityNode *node = this->entities;
+  while (node) {
+    if (node->entity->getX() == x && node->entity->getY() == y) {
+      return false;
+    }
+    node = node->next;
+  }
+  return true;
+}
+
 Game::EntityNode *Game::destroyEntityNode(EntityNode *node) {
   Game::EntityNode *pnode = this->entities;
   if (node == this->entities)
@@ -89,6 +100,7 @@ void Game::purgeEntities() {
 }
 
 Entity *Game::buildEntity(const std::string &type) {
+  Logger *log = Logger::get();
   Game::EntityNode *node = this->entities;
   Game::EntityNode *newNode = new Game::EntityNode;
   newNode->next = nullptr;
@@ -96,7 +108,18 @@ Entity *Game::buildEntity(const std::string &type) {
     newNode->entity = new Missile(COLS / 5, (LINES - this->scorebar) / 2, "Player");
     newNode->entity->setColor(COLOR_ANGRY);
   } else if (type == "Enemy") {
-    newNode->entity = new Enemy(3 * COLS / 4 + rand() % (COLS / 4), rand() % (LINES - this->scorebar));
+    int x, y;
+    bool empty = false;
+    while (empty == false)
+    {
+      srand(clock());
+      x = 3 * COLS / 4 + rand() % (COLS / 4);
+      y = rand() % (LINES - this->scorebar);
+      empty = Game::checkEmpty(x, y);
+      //log->out() << "collision at creation enenmy " << x << " " << y << std::endl;
+    }
+    log->out() << "creation enenmy " << x << " " << y << std::endl;
+    newNode->entity = new Enemy(x,y);
   } else if (type == "Player") {
     newNode->entity = new Player(COLS / 5, (LINES - this->scorebar) / 2);
     newNode->entity->setColor(COLOR_CONSTIPATED);

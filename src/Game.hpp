@@ -23,6 +23,7 @@ public:
   ~Game();
   void loop();
   void checkCollisions();
+  bool checkEmpty(int x, int y);
   Entity *buildEntity(const std::string &type);
   void purgeEntities();
   void catchEvents();
