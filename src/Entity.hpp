@@ -15,6 +15,7 @@
 #define ENTITY_HPP
 
 #include <iostream>
+#include "ncurses.h"
 
 class Entity {
 protected:

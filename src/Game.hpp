@@ -6,6 +6,7 @@
 #include "Logger.hpp"
 #include "Missile.hpp"
 #include "Player.hpp"
+#include "Bonus.hpp"
 #include <cmath>
 #include <ctime>
 #include <ncurses.h>
@@ -35,8 +36,10 @@ private:
   void checkCollisions();
   Entity *buildEntity(const std::string &type);
   void purgeEntities();
-  bool checkEmpty(int, int);
+  bool checkEmpty(const int, const int);
   void catchEvents();
+  void generateEvents();
+  int generateRandom(const int, const int);
 
   WINDOW *topbar;
   WINDOW *mainwin;
