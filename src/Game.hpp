@@ -6,9 +6,9 @@
 #include "Logger.hpp"
 #include "Missile.hpp"
 #include "Player.hpp"
+#include <ctime>
 #include <ncurses.h>
 #include <string>
-#include <ctime>
 
 class Game {
 
@@ -17,20 +17,11 @@ public:
     Entity *entity;
     EntityNode *next;
   };
-  enum COLORS { COLOR_NONE, COLOR_MISSILES, COLOR_PLAYER, COLOR_ALIEN, COLOR_SCORE };
+  enum COLORS { COLOR_NONE, COLOR_MISSILES, COLOR_PLAYER, COLOR_ALIEN, COLOR_SCORE, COLOR_BORDER };
 
   Game();
   ~Game();
   void loop();
-  void checkCollisions();
-  Entity *buildEntity(const std::string &type);
-  void purgeEntities();
-  void catchEvents();
-
-protected:
-  Game::EntityNode *entities;
-  Player *player;
-  bool end;
 
 private:
   Game(Game const &src);
@@ -38,11 +29,23 @@ private:
   EntityNode *destroyEntityNode(EntityNode *);
   void displayScore();
   void update();
+  void initialize();
+  void gameOver();
+  void checkCollisions();
+  Entity *buildEntity(const std::string &type);
+  void purgeEntities();
+  void catchEvents();
+
   WINDOW *topbar;
   WINDOW *mainwin;
   int score;
-  const int scorebar;
-  const std::clock_t start_time;
+  const int topbar_size;
+  const int mainwin_width;
+  const int mainwin_height;
+  std::clock_t start_time;
+  Game::EntityNode *entities;
+  Player *player;
+  bool end;
 };
 
 #endif
