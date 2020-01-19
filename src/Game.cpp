@@ -167,6 +167,9 @@ Entity *Game::buildEntity(const std::string &type) {
   } else if (type == "Player") {
     newNode->entity = new Player(this->mainwin_width / 5, this->mainwin_height / 2);
     newNode->entity->setColor(COLOR_PLAYER);
+  } else if (type == "Boss") {
+    newNode->entity = new Player(4 * this->mainwin_width / 5, this->mainwin_height / 2);
+    newNode->entity->setColor(COLOR_ALIEN);
   }
   if (!node) {
     this->entities = newNode;
@@ -181,6 +184,7 @@ Entity *Game::buildEntity(const std::string &type) {
 int Game::generateRandom(const int low, const int up) { return (low + std::rand() % (1 + up)); }
 
 void Game::generateEvents() {
+  Logger *log = Logger::get();
   // Generate Bonus
   // if (((this->score % 20) == 19) &&) {
   //   this->buildEntity("Bonus");
@@ -192,6 +196,20 @@ void Game::generateEvents() {
     Missile *miss = (Missile *)this->buildEntity("Missile Enemy");
     miss->setX(en->getX() - 1);
     miss->setY(en->getY());
+  }
+  if (this->score >= 150 && this->score <= 151)
+  {
+    for(int i = -4; i <= 4; i++)
+    {
+      for(int j = -4; j <= 4; j++)
+      {
+        log->out() << i << " " << j << std::endl;
+        Boss *bs = (Boss *)this->buildEntity("Boss");
+        bs->setX(4 * COLS / 5 + i);     
+        bs->setY(LINES/ 2 + j);     
+      }
+    }
+
   }
 }
 

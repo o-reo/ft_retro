@@ -7,6 +7,7 @@
 #include "Missile.hpp"
 #include "Player.hpp"
 #include "Bonus.hpp"
+#include "Boss.hpp"
 #include <cmath>
 #include <ctime>
 #include <ncurses.h>
