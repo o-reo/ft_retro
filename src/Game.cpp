@@ -40,8 +40,12 @@ void Game::initialize() {
   this->player = (Player *)this->buildEntity("Player");
   this->score = 0;
   int i = -1;
-  while (++i < 100)
+  while (++i < 10) 
+  {
+    log->out() << "Creation enemy " << i << std::endl;
     this->buildEntity("Enemy");
+  }
+  log->out() << "Initializing window" << std::endl;
 }
 
 Game::~Game() {
@@ -73,7 +77,8 @@ void Game::checkCollisions() {
           check_node->entity->getY() == node->entity->getY()) {
         if (node->entity->getNbLive() != 0)
           node->entity->setNbLive(node->entity->getNbLive() - 1);
-        this->score++;
+        if (check_node->entity->getType() == "Enemy" || node->entity->getType() == "Enemy")
+          this->score++;
         if (node->entity->getType() == "Player" && node->entity->getNbLive() == 0)
           this->end = true;
         break;
@@ -132,9 +137,9 @@ Entity *Game::buildEntity(const std::string &type) {
     int x, y;
     bool empty = false;
     while (empty == false) {
-      srand(clock());
-      x = 1 + 3 * (this->mainwin_width - 2) / 4 + rand() % ((this->mainwin_width - 1) / 4);
-      y = 1 + rand() % (this->mainwin_height - 2);
+      std::srand(std::clock());
+      x = 1 + 3 * (this->mainwin_width - 2) / 4 + std::rand() % ((this->mainwin_width - 1) / 4);
+      y = 1 + std::rand() % (this->mainwin_height - 2);
       empty = Game::checkEmpty(x, y);
     }
     newNode->entity = new Enemy(x, y);
@@ -239,6 +244,10 @@ void Game::loop() {
     tic = tac = std::clock();
     while (tac - tic < CLOCKS_PER_SEC / 100)
       tac = std::clock();
+      std::srand(std::clock());
+      int ratio = 1000 / (this->score + 1) + 10;
+      if (std::rand() % ratio == 0)
+        this->buildEntity("Enemy");
   }
   this->gameOver();
 }

@@ -6,6 +6,7 @@
 #include "Logger.hpp"
 #include "Missile.hpp"
 #include "Player.hpp"
+#include <cmath>
 #include <ctime>
 #include <ncurses.h>
 #include <string>
