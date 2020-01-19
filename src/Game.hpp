@@ -8,7 +8,7 @@
 #include "Player.hpp"
 #include <ncurses.h>
 #include <string>
-#include <time.h>
+#include <ctime>
 
 class Game {
 
@@ -17,7 +17,7 @@ public:
     Entity *entity;
     EntityNode *next;
   };
-  enum COLORS { COLOR_NONE, COLOR_ANGRY, COLOR_CALM, COLOR_CONSTIPATED };
+  enum COLORS { COLOR_NONE, COLOR_MISSILES, COLOR_PLAYER, COLOR_ALIEN, COLOR_SCORE };
 
   Game();
   ~Game();
@@ -36,11 +36,13 @@ private:
   Game(Game const &src);
   Game &operator=(Game const &src);
   EntityNode *destroyEntityNode(EntityNode *);
+  void displayScore();
   void update();
   WINDOW *topbar;
   WINDOW *mainwin;
   int score;
   const int scorebar;
+  const std::clock_t start_time;
 };
 
 #endif

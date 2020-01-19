@@ -1,6 +1,6 @@
 #include "Game.hpp"
 
-Game::Game() : entities(nullptr), end(false), score(0), scorebar(3) {
+Game::Game() : entities(nullptr), end(false), score(0), scorebar(3), start_time(std::clock()) {
   initscr();
   noecho();
   cbreak();
@@ -8,9 +8,12 @@ Game::Game() : entities(nullptr), end(false), score(0), scorebar(3) {
   timeout(0);
   curs_set(0);
   start_color();
-  init_pair(Game::COLOR_ANGRY, COLOR_RED, COLOR_BLACK);
-  init_pair(Game::COLOR_CONSTIPATED, COLOR_YELLOW, COLOR_BLACK);
-  init_pair(Game::COLOR_CALM, COLOR_GREEN, COLOR_BLACK);
+  // Set cyan to be purpleish
+  init_color(COLOR_CYAN, 600, 20, 500);
+  init_pair(Game::COLOR_MISSILES, COLOR_RED, COLOR_BLACK);
+  init_pair(Game::COLOR_PLAYER, COLOR_YELLOW, COLOR_BLACK);
+  init_pair(Game::COLOR_SCORE, COLOR_GREEN, COLOR_BLACK);
+  init_pair(Game::COLOR_ALIEN, COLOR_CYAN, COLOR_BLACK);
 
   this->topbar = subwin(stdscr, this->scorebar, COLS, 0, 0);
   this->mainwin = subwin(stdscr, LINES - this->scorebar, COLS, this->scorebar, 0);
@@ -93,12 +96,13 @@ Entity *Game::buildEntity(const std::string &type) {
   newNode->next = nullptr;
   if (type == "Missile") {
     newNode->entity = new Missile(COLS / 5, (LINES - this->scorebar) / 2, "Player");
-    newNode->entity->setColor(COLOR_ANGRY);
+    newNode->entity->setColor(COLOR_MISSILES);
   } else if (type == "Enemy") {
     newNode->entity = new Enemy(3 * COLS / 4 + rand() % (COLS / 4), rand() % (LINES - this->scorebar));
+    newNode->entity->setColor(COLOR_ALIEN);
   } else if (type == "Player") {
     newNode->entity = new Player(COLS / 5, (LINES - this->scorebar) / 2);
-    newNode->entity->setColor(COLOR_CONSTIPATED);
+    newNode->entity->setColor(COLOR_PLAYER);
   }
   if (!node) {
     this->entities = newNode;
@@ -154,25 +158,29 @@ void Game::catchEvents() {
   }
 }
 
-void Game::loop() {
-  // Logger *log = Logger::get();
-  while (!this->end) {
-    // Score
-    werase(this->topbar);
-    box(this->topbar, ACS_VLINE, ACS_HLINE);
-    mvwprintw(this->topbar, 1, 1, "Score: %i", this->score);
-    wrefresh(this->topbar);
+void Game::displayScore() {
+  werase(this->topbar);
+  wattron(this->topbar, A_BOLD);
+  wattron(this->topbar, COLOR_PAIR(COLOR_SCORE));
+  mvwprintw(this->topbar, 1, 1, "Time: %4i  Score: %4i  Lives: %4u", (std::clock() - this->start_time) / CLOCKS_PER_SEC,
+            this->score, this->player->getNbLive());
+  wattroff(this->topbar, COLOR_PAIR(COLOR_SCORE));
+  wattroff(this->topbar, A_BOLD);
+  wrefresh(this->topbar);
+}
 
+void Game::loop() {
+  while (!this->end) {
+    this->displayScore();
     werase(this->mainwin);
     this->purgeEntities();
-    // log->out() << getch() << std::endl;
     this->catchEvents();
     this->update();
     this->checkCollisions();
     wrefresh(this->mainwin);
-    clock_t tac, tic;
-    tic = tac = clock();
+    std::clock_t tac, tic;
+    tic = tac = std::clock();
     while (tac - tic < CLOCKS_PER_SEC / 100)
-      tac = clock();
+      tac = std::clock();
   }
 }

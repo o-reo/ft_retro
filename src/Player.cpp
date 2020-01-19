@@ -15,7 +15,7 @@
 
 Player::Player(unsigned int x, unsigned int y) : Entity(), control(CONTROL_NONE) {
   this->_type = "Player";
-  this->_c = "o";
+  this->_c = ">";
   this->_nbLive = 3;
   this->_x = x;
   this->_y = y;
