@@ -116,12 +116,14 @@ void Game::checkCollisions() {
       Game::EntityNode *check_boss = this->entities;
       while (check_boss) {
         if (check_boss != node && check_boss->entity->getType() == "Boss")
-          check_boss->entity->updateNbLive(- 1 * this->generateRandom(0, 1));
+          check_boss->entity->updateNbLive(-1 * this->generateRandom(0, 1));
         check_boss = check_boss->next;
       }
     }
     node = node->next;
   }
+  if (this->boss_active && !has_boss)
+    this->player->updateScore(500);
   this->boss_active = has_boss;
 }
 
@@ -224,7 +226,7 @@ int Game::generateRandom(const int low, const int up) { return (low + std::rand(
 
 void Game::generateEvents() {
   // Generate Bonus
-  if (this->generateRandom(0, 300) == 0) {
+  if (this->generateRandom(0, 500) == 0) {
     this->buildEntity("Bonus");
   }
   // Generate Asteroids
@@ -232,7 +234,7 @@ void Game::generateEvents() {
     this->buildEntity("Asteroid");
   }
   // Generate Enemies
-  int ratio = 2000 / (this->player->getScore() + 1) + 10;
+  int ratio = 1500 / (this->player->getScore() + 1) + 10;
   if (this->generateRandom(0, ratio) == 0) {
     Enemy *en = (Enemy *)this->buildEntity("Enemy");
     Missile *miss = (Missile *)this->buildEntity("Missile Enemy");
@@ -240,7 +242,7 @@ void Game::generateEvents() {
     miss->setY(en->getY());
   }
   std::clock_t current_time = (std::clock() - this->start_time) / CLOCKS_PER_SEC;
-  if (!this->boss_active && current_time != 0 && current_time % 20 == 0) {
+  if (!this->boss_active && current_time != 0 && current_time % 60 == 0) {
     this->boss_active = true;
     for (int i = 0; i <= 12; i++) {
       int begin;
@@ -304,9 +306,11 @@ void Game::catchEvents() {
       this->player->setControl(Player::CONTROL_DOWN);
     break;
   case 32:
-    miss = this->buildEntity("Missile Player");
-    miss->setX(this->player->getX() + 1);
-    miss->setY(this->player->getY());
+    if (this->player->shoot()) {
+      miss = this->buildEntity("Missile Player");
+      miss->setX(this->player->getX() + 1);
+      miss->setY(this->player->getY());
+    }
     break;
   default:
     break;

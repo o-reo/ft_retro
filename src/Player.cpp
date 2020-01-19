@@ -19,6 +19,7 @@ Player::Player(unsigned int x, unsigned int y) : Entity(), control(CONTROL_NONE)
   this->_nbLive = 3;
   this->_x = x;
   this->_y = y;
+  this->last_shoot = std::clock();
 }
 
 Player::~Player(void) {}
@@ -60,4 +61,13 @@ bool Player::hasImmunity(const Entity *entity) {
   if (entity->getType() == "Bonus")
     return true;
   return false;
+}
+
+bool Player::shoot()
+{
+  std::clock_t current = std::clock();
+  if ((current - this->last_shoot) < CLOCKS_PER_SEC / 10)
+    return false;
+  this->last_shoot = current;
+  return true;
 }

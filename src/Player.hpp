@@ -27,9 +27,10 @@ public:
   int getScore() const;
   void updateScore(const int delta);
   virtual bool hasImmunity(const Entity *entity);
-
+  bool shoot();
 private:
   CONTROL control;
+  std::clock_t last_shoot;
   int score;
 };
 
