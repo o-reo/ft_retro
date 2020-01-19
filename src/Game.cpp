@@ -9,6 +9,7 @@ Game::Game()
   timeout(0);
   curs_set(0);
   start_color();
+
   std::srand(std::clock());
 
   // Set cyan to be purpleish
@@ -20,6 +21,7 @@ Game::Game()
   init_pair(Game::COLOR_SCORE, COLOR_GREEN, COLOR_BLACK);
   init_pair(Game::COLOR_ALIEN, COLOR_CYAN, COLOR_BLACK);
   init_pair(Game::COLOR_BORDER, COLOR_BLUE, COLOR_BLACK);
+  init_pair(Game::COLOR_ASTEROID, COLOR_BLUE, COLOR_BLACK);
 
   this->topbar = subwin(stdscr, this->topbar_size, this->mainwin_width, 0, 0);
 
@@ -52,6 +54,14 @@ void Game::initialize() {
     this->buildEntity("Enemy");
   }
   log->out() << "Initializing window" << std::endl;
+  if (LINES < (this->mainwin_height + 10) || COLS < (this->mainwin_width + 10)) {
+    this->end = true;
+    mvprintw(LINES / 2, COLS / 2 - 15, "Terminal window is too small");
+    refresh();
+    for (unsigned long i = 1999999999; i > 0; i--)
+      ;
+    return;
+  }
   this->end = false;
 }
 
@@ -77,7 +87,7 @@ void Game::checkCollisions() {
         node->entity->getX() < 0 || node->entity->getY() < 0) {
       node->entity->setNbLive(0);
       if (node->entity->getType() == "Enemy")
-        this->score = this->score <= 3 ? 0 : this->score - 3;
+        this->score = this->score <= 1 ? 0 : this->score - 1;
       node = node->next;
       continue;
     }
@@ -106,6 +116,8 @@ void Game::checkCollisions() {
             }
           }
         }
+        if (node->entity->getType() == "Missile Player" && check_node->entity->getType() == "Enemy")
+          this->score++;
         if (node->entity->getType() == "Player" && node->entity->getNbLive() == 0)
           this->end = true;
         break;
@@ -159,13 +171,23 @@ Entity *Game::buildEntity(const std::string &type) {
   newNode->next = nullptr;
   if (type == "Bonus") {
     newNode->entity = new Bonus(this->mainwin_width / 5, this->mainwin_height / 2);
-    newNode->entity->setColor(COLOR_MISSILES_PLAYER);
+    newNode->entity->setColor(COLOR_BORDER);
   } else if (type == "Missile Player") {
     newNode->entity = new Missile(this->mainwin_width / 5, this->mainwin_height / 2, "Player");
     newNode->entity->setColor(COLOR_MISSILES_PLAYER);
   } else if (type == "Missile Enemy") {
     newNode->entity = new Missile(this->mainwin_width / 5, this->mainwin_height / 2, "Enemy");
     newNode->entity->setColor(COLOR_MISSILES_ENEMY);
+  } else if (type == "Asteroid") {
+    // Random Asteroid position
+    int y;
+    bool empty = false;
+    while (empty == false) {
+      y = this->generateRandom(0, this->mainwin_height);
+      empty = Game::checkEmpty(0, y);
+    }
+    newNode->entity = new Asteroid(this->mainwin_width, y);
+    newNode->entity->setColor(COLOR_ASTEROID);
   } else if (type == "Enemy") {
     // Random enemy position
     int x, y;
@@ -202,15 +224,17 @@ void Game::generateEvents() {
   //   this->buildEntity("Bonus");
   // }
   // Generate Enemies
+  if (this->generateRandom(0, 200) == 0) {
+    this->buildEntity("Asteroid");
+  }
   int ratio = 1000 / (this->score + 1) + 10;
-  if (std::rand() % ratio == 0) {
+  if (this->generateRandom(0, ratio) == 0) {
     Enemy *en = (Enemy *)this->buildEntity("Enemy");
     Missile *miss = (Missile *)this->buildEntity("Missile Enemy");
     miss->setX(en->getX() - 1);
     miss->setY(en->getY());
   }
-  if (this->score >= 50 && this->score <= 51)
-  {
+  if ((this->score % 500) >= 250 && (this->score % 500) <= 251) {
     for(int i = 0; i <= 12; i++)
     {
       int begin;
@@ -313,7 +337,9 @@ void Game::gameOver() {
 }
 
 void Game::loop() {
+  std::clock_t tic, tac;
   while (!this->end) {
+    tic = std::clock();
     werase(this->mainwin);
     this->purgeEntities();
     this->catchEvents();
@@ -322,8 +348,7 @@ void Game::loop() {
     this->displayScore();
     this->update();
     wrefresh(this->mainwin);
-    std::clock_t tac, tic;
-    tic = tac = std::clock();
+    tac = std::clock();
     while (tac - tic < CLOCKS_PER_SEC / 100)
       tac = std::clock();
   }
