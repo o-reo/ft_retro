@@ -102,16 +102,7 @@ void Game::checkCollisions() {
           if (node->entity->getNbLive() > 0)
             node->entity->setNbLive(node->entity->getNbLive() - 1);
           this->player->updateScore(1);
-          if (node->entity->getType() == "Boss" && node->entity->getNbLive() == 0) {
-            Game::EntityNode *check_boss = this->entities;
-            while (check_boss) {
-              if (check_boss != node && check_boss->entity->getType() == "Boss") {
-                if (check_boss->entity->getNbLive() > 0)
-                  check_boss->entity->setNbLive(check_boss->entity->getNbLive() - 1);
-              }
-              check_boss = check_boss->next;
-            }
-          }
+          
         }
         if (node->entity->getType() == "Player" && check_node->entity->getType() == "Bonus")
           ((Bonus *)(check_node->entity))->applyBonus(node->entity);
@@ -121,6 +112,16 @@ void Game::checkCollisions() {
       }
       check_node = check_node->next;
     }
+    if (node->entity->getType() == "Boss" && node->entity->getNbLive() == 0) {
+            Game::EntityNode *check_boss = this->entities;
+            while (check_boss) {
+              if (check_boss != node && check_boss->entity->getType() == "Boss") {
+                if (check_boss->entity->getNbLive() > 0)
+                  check_boss->entity->setNbLive(check_boss->entity->getNbLive() - 1);
+              }
+              check_boss = check_boss->next;
+            }
+          }
     node = node->next;
   }
   this->boss_active = has_boss;
@@ -178,10 +179,10 @@ Entity *Game::buildEntity(const std::string &type) {
     newNode->entity = new Bonus(this->mainwin_width, y);
     newNode->entity->setColor(COLOR_BONUS);
   } else if (type == "Missile Player") {
-    newNode->entity = new Missile(this->mainwin_width / 5, this->mainwin_height / 2, "Player");
+    newNode->entity = new Missile(this->mainwin_width, this->mainwin_height / 2, "Player");
     newNode->entity->setColor(COLOR_MISSILES_PLAYER);
   } else if (type == "Missile Enemy") {
-    newNode->entity = new Missile(this->mainwin_width / 5, this->mainwin_height / 2, "Enemy");
+    newNode->entity = new Missile(this->mainwin_width, this->mainwin_height / 2, "Enemy");
     newNode->entity->setColor(COLOR_MISSILES_ENEMY);
   } else if (type == "Asteroid") {
     // Random Asteroid position
@@ -260,12 +261,12 @@ void Game::generateEvents() {
         Boss *bs = (Boss *)this->buildEntity("Boss");
         bs->setX(4 * this->mainwin_width / 5 + i);     
         bs->setY(this->mainwin_height / 2 + j);     
-        if (i == 0 || i == 4 || i == 8)
+        /*if (i == 0 || i == 4 || i == 8)
         {
           Missile *miss = (Missile *)this->buildEntity("Missile Enemy");
           miss->setX(bs->getX() - 1);
           miss->setY(bs->getY());
-        }
+        }*/
       }
     }
   }
