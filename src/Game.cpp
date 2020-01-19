@@ -259,6 +259,12 @@ void Game::generateEvents() {
         Boss *bs = (Boss *)this->buildEntity("Boss");
         bs->setX(4 * this->mainwin_width / 5 + i);     
         bs->setY(this->mainwin_height / 2 + j);     
+        if (i == 0 || i == 4 || i == 8)
+        {
+          Missile *miss = (Missile *)this->buildEntity("Missile Enemy");
+          miss->setX(bs->getX() - 1);
+          miss->setY(bs->getY());
+        }
       }
     }
   }
