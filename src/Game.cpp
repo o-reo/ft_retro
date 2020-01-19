@@ -27,25 +27,22 @@ Game::Game()
 void Game::initialize() {
   Logger *log = Logger::get();
   log->out() << "Initializing window" << std::endl;
-
   Game::EntityNode *ents = this->entities;
   while (ents) {
     this->destroyEntityNode(ents);
     ents = ents->next;
   }
-  this->start_time = std::clock(), this->end = false;
-  if (this->player != nullptr)
-    delete this->player;
+  this->start_time = std::clock();
   this->entities = nullptr;
   this->player = (Player *)this->buildEntity("Player");
   this->score = 0;
   int i = -1;
-  while (++i < 10) 
-  {
+  while (++i < 10) {
     log->out() << "Creation enemy " << i << std::endl;
     this->buildEntity("Enemy");
   }
   log->out() << "Initializing window" << std::endl;
+  this->end = false;
 }
 
 Game::~Game() {
@@ -217,17 +214,19 @@ void Game::displayScore() {
 }
 
 void Game::gameOver() {
-
+  // Logger *log = Logger::get();
   timeout(-1);
   werase(this->mainwin);
   mvwprintw(this->mainwin, this->mainwin_height / 2, this->mainwin_width / 2, "GAME OVER");
   wrefresh(this->mainwin);
-  int c = getch();
-
-  timeout(0);
-  if (c == 10) {
-    this->initialize();
-    this->loop();
+  int c;
+  while ((c = getch()) != 113) {
+    timeout(0);
+    if (c == 10) {
+      this->initialize();
+      this->loop();
+      break;
+    }
   }
 }
 
@@ -244,10 +243,10 @@ void Game::loop() {
     tic = tac = std::clock();
     while (tac - tic < CLOCKS_PER_SEC / 100)
       tac = std::clock();
-      std::srand(std::clock());
-      int ratio = 1000 / (this->score + 1) + 10;
-      if (std::rand() % ratio == 0)
-        this->buildEntity("Enemy");
+    std::srand(std::clock());
+    int ratio = 1000 / (this->score + 1) + 10;
+    if (std::rand() % ratio == 0)
+      this->buildEntity("Enemy");
   }
   this->gameOver();
 }
