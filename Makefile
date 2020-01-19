@@ -10,6 +10,7 @@ RAW_SRC = main \
 					Enemy \
 					Missile \
 					Bonus \
+					Boss \
 					Asteroid
 SRC = $(addprefix src/, $(addsuffix .cpp, $(RAW_SRC)))
 OBJ = $(addprefix build/, $(addsuffix .o, $(RAW_SRC)))

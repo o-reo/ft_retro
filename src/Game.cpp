@@ -1,6 +1,6 @@
 #include "Game.hpp"
 
-Game::Game() : topbar_size(2), mainwin_width(120), mainwin_height(20), entities(nullptr), player(nullptr), end(false) {
+Game::Game() : topbar_size(2), mainwin_width(120), mainwin_height(20), entities(nullptr), player(nullptr),boss_active(false), end(false) {
   initscr();
   noecho();
   cbreak();
@@ -79,8 +79,12 @@ Game::~Game() {
 }
 
 void Game::checkCollisions() {
+  // Logger *log = Logger::get();
+  bool has_boss = false;
   Game::EntityNode *node = this->entities;
   while (node) {
+    if (node->entity->getType() == "Boss")
+      has_boss = true;
     if (node->entity->getX() > this->mainwin_width || node->entity->getY() > this->mainwin_height ||
         node->entity->getX() < 0 || node->entity->getY() < 0) {
       node->entity->setNbLive(0);
@@ -95,6 +99,19 @@ void Game::checkCollisions() {
           check_node->entity->getY() == node->entity->getY()) {
         if (!node->entity->hasImmunity(check_node->entity)) {
           node->entity->updateNbLive(-1);
+          if (node->entity->getNbLive() > 0)
+            node->entity->setNbLive(node->entity->getNbLive() - 1);
+          this->player->updateScore(1);
+          if (node->entity->getType() == "Boss" && node->entity->getNbLive() == 0) {
+            Game::EntityNode *check_boss = this->entities;
+            while (check_boss) {
+              if (check_boss != node && check_boss->entity->getType() == "Boss") {
+                if (check_boss->entity->getNbLive() > 0)
+                  check_boss->entity->setNbLive(check_boss->entity->getNbLive() - 1);
+              }
+              check_boss = check_boss->next;
+            }
+          }
         }
         if (node->entity->getType() == "Player" && check_node->entity->getType() == "Bonus")
           ((Bonus *)(check_node->entity))->applyBonus(node->entity);
@@ -106,6 +123,7 @@ void Game::checkCollisions() {
     }
     node = node->next;
   }
+  this->boss_active = has_boss;
 }
 
 bool Game::checkEmpty(const int x, const int y) {
@@ -189,6 +207,9 @@ Entity *Game::buildEntity(const std::string &type) {
   } else if (type == "Player") {
     newNode->entity = new Player(this->mainwin_width / 5, this->mainwin_height / 2);
     newNode->entity->setColor(COLOR_PLAYER);
+  } else if (type == "Boss") {
+    newNode->entity = new Boss(4 * this->mainwin_width / 5, this->mainwin_height / 2);
+    newNode->entity->setColor(COLOR_ALIEN);
   }
   if (!node) {
     this->entities = newNode;
@@ -204,7 +225,7 @@ int Game::generateRandom(const int low, const int up) { return (low + std::rand(
 
 void Game::generateEvents() {
   // Generate Bonus
-  if (this->generateRandom(0, 800) == 0) {
+  if (this->generateRandom(0, 500) == 0) {
     this->buildEntity("Bonus");
   }
   // Generate Asteroids
@@ -218,6 +239,28 @@ void Game::generateEvents() {
     Missile *miss = (Missile *)this->buildEntity("Missile Enemy");
     miss->setX(en->getX() - 1);
     miss->setY(en->getY());
+  }
+  if (!this->boss_active && (this->player->getScore() % 1000) > 500) {
+    this->boss_active = true;
+    for (int i = 0; i <= 12; i++) {
+      int begin;
+      int end;
+      if (i < 4) {
+        begin = -2;
+        end = +2;
+      } else if (i < 8) {
+        begin = -6;
+        end = +6;
+      } else {
+        begin = -10;
+        end = +10;
+      }
+      for (int j = begin; j <= end; j++) {
+        Boss *bs =  (Boss *)this->buildEntity("Boss");
+        bs->setX(4 * this->mainwin_width / 5 + i);
+        bs->setY(this->mainwin_height / 2 + j);
+      }
+    }
   }
 }
 

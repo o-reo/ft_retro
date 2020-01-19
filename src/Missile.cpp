@@ -44,8 +44,6 @@ void Missile::updatePos(void) {
 bool Missile::hasImmunity(const Entity *entity) {
   if (entity->getType() == "Boss" && this->_dx < 0.0f)
     return true;
-  if (entity->getType() == "Missile Enemy" || entity->getType() == "Missile Player")
-    return true;
 	if (entity->getType() == "Enemy" && this->_ownerType == "Enemy")
 		return true;
   return false;

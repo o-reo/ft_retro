@@ -1,38 +1,35 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   Enemy.cpp                                        .::    .:/ .      .::   */
+/*   Boss.hpp                                         .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
 /*   By: bpajot <bpajot@student.le-101.fr>          +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2020/01/18 11:55:21 by bpajot       #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/18 17:13:05 by bpajot      ###    #+. /#+    ###.fr     */
+/*   Created: 2020/01/19 14:40:10 by bpajot       #+#   ##    ##    #+#       */
+/*   Updated: 2020/01/19 14:56:11 by bpajot      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#include "Enemy.hpp"
+#ifndef BOSS_HPP
+# define BOSS_HPP
 
-Enemy::Enemy(unsigned int x, unsigned int y) {
-  this->_type = "Enemy";
-  this->_c = "x";
-  this->_nbLive = 1;
-  this->_x = x;
-  this->_y = y;
-  this->_dx = -1.0 / 30;
-  this->_dy = 0;
-}
+# include "Entity.hpp"
+# include <iostream>
 
-Enemy::~Enemy(void) {}
+class Boss : public Entity
+{
+	private:
+		unsigned int	_base_y;
+		
+	public:
+		Boss(unsigned int x, unsigned int y);
+		virtual ~Boss(void);
 
-void Enemy::updatePos(void) {
-  this->_x += this->_dx;
-  this->_y += this->_dy;
-}
+		virtual void	updatePos(void);
 
-bool Enemy::hasImmunity(const Entity *entity) {
-  if (entity->getType() == "Missile Enemy") {
-    return true;
-  }
-  return false;
-}
+		static unsigned int liveGlobalBoss;
+		virtual bool hasImmunity(const Entity *entity);
+};
+
+#endif

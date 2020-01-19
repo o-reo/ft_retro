@@ -8,6 +8,8 @@
 #include "Logger.hpp"
 #include "Missile.hpp"
 #include "Player.hpp"
+#include "Bonus.hpp"
+#include "Boss.hpp"
 #include <cmath>
 #include <ctime>
 #include <ncurses.h>
@@ -60,6 +62,7 @@ private:
   std::clock_t start_time;
   Game::EntityNode *entities;
   Player *player;
+  bool boss_active;
   bool end;
 };
 
